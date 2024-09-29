@@ -10,7 +10,7 @@ Este é um projeto para o PI 6, Metro Chatbot, desenvolvido com Python, Django e
 2. **Entre no diretório do projeto**:
    - Navegue até o diretório correto:
      ```bash
-     cd chat_channels/metro_chatbot
+     cd chat_channels
      ```
    - Para garantir que você está no diretório certo, use o comando `dir` (ou `ls` no Linux/Mac) e verifique se o arquivo `manage.py` está presente.
 
