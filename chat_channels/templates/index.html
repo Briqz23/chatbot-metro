@@ -9,14 +9,10 @@
     <div class="parent">
         <div class="child">
             <h1>Entrar na sala</h1>
-            <form action="" method="POST">
+            <form action="{% url 'create-room' %}" method="POST">
                 <!-- Token por sessão -->
                 {% csrf_token %}
-                <label for="">Usuário</label><br>
-                <input type="text" placeholder="User" name="username" required><br>
-                <label for="">Nome da Sala</label><br>
-                <input type="text" placeholder="Sala" name="room" required><br>
-                <center><button type="submit">Submit</button></center><br>
+                <button type="submit">Iniciar Sessão</button><br>
             </form>
         </div>
     </div>

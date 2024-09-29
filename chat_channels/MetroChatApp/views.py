@@ -1,23 +1,19 @@
 from django.shortcuts import redirect, render
 from .models import Room, Message
+import secrets
 # Tratam as reqs HTTP e retornam respostas
 
 def CreateRoom(request):
     if request.method == 'POST':
-         
-        username = request.POST['username']
-        room = request.POST['room']
+        # Gera usuário e room 
+        username = "user_" + secrets.token_hex(2)
+        room_name = secrets.token_hex(8)
 
-        # Ver se a room ja existe, se não, cria uma 
-        try:
-            get_room = Room.objects.get(room_name=room)
-        except Room.DoesNotExist:
-            new_room = Room(room_name=room)
-            new_room.save()
+        new_room, created = Room.objects.get_or_create(room_name=room_name)
         # Retorna para nova room com a função MessageView
-        return redirect('room', room_name=room, username=username)
-    
+        return redirect('room', room_name=new_room.room_name, username=username)
     return render(request, 'index.html')
+    
 
 def MessageView(request, room_name, username):
     get_room = Room.objects.get(room_name=room_name)
