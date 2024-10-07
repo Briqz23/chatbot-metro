@@ -6,72 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <title>Entrar Sala</title>
+    <style>
+        @font-face {
+            font-family: 'Lemon Milk';
+            src: url("{% static 'fonts/LEMONMILK-light.otf' %}") format('truetype'); /* Fonte */
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Lemon Milk', sans-serif; 
+        }
+    </style>
 </head>
 <body>
     <div class="parent">
         <div class="child">
-            <h1>Entrar na sala</h1>
-            <form action="{% url 'create-room' %}" method="POST">
-                <!-- Token por sessão -->
+            <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" style="width: 500px; height: auto; background-color: transparent; margin-bottom: -20px;">
+            
+            <form id="roomForm" action="{% url 'create-room' %}" method="POST">
                 {% csrf_token %}
-                <button type="submit">Iniciar Sessão</button><br>
+                <button type="submit">Toque para iniciar a sessão</button><br>
             </form>
         </div>
     </div>
+
+    <script>
+        // Script para avançar para a próxima tela ao clicar em qualquer lugar da tela
+        document.body.addEventListener('click', function() {
+            document.getElementById('roomForm').submit();
+        });
+    </script>
 </body>
 <style>
-
     * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
-    
+
     .parent {
-        background-color: #DAAD86;
+        background-color: #131F37;
         height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
     }
-    
+
     .child {
         display: flex;
-        background-color: #659DBD;
-        height: 80vh;
-        width: 50%;
-        border-radius: 10px;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 100px;
+        background-color: #131F37;
+        height: 80vh;
+        width: 50%;
+        border-radius: 10px;
+        text-align: center;
     }
-    
+
     form {
         width: 80%;
     }
-    
-    input {
-        padding: 10px;
-        border: 1px solid dodgerblue;
-        width: 100%;
-        margin: 10px;
-        border-radius: 5px;
-    }
-    
+
     button {
-        background-color: #DAAD86;
-        padding: 10px;
-        color: white;
-        border: none;
+        background-color: transparent; 
+        color: white; /* Cor da Botão Sessão */
+        padding: 5px; 
+        border: 2px solid #131F37; /* Cor da borda */
         border-radius: 5px;
-        width: 20%;
+        width: 100%;
+        margin-top: 0px;
     }
-    
+
     button:hover {
-        padding: 15px;
-        transition: 0.8s;
+        padding: 10px; 
+        transition: 0.5s; 
     }
 </style>
 </html>
