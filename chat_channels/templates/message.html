@@ -6,12 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    
-    <title>Mensagens</title>
-    <!-- load static -->
-    {% load static %}
     <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
-    <!-- link to h=css file -->
+    <title>Mensagens</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
@@ -27,7 +23,7 @@
                             <!-- mensagem diferente do usuário logado -->
                             {% if i.sender != user %}
                                 <div class="receive">
-                                    <p style="color: #000;"> {{ i.message }}<strong>-{{ i.sender }}</strong></p>
+                                    <p style="color: #000;"> {{ i.message }}<strong>-IA</strong></p>
                                 </div>
                             {% else %}
                                 <div class="send">
@@ -106,7 +102,7 @@
         var messageDiv = document.querySelector('.message');
         // # OBS: no futuro provavelmente n precisaremos disso (chat de user e IA, somente)
         if (sender != '{{user}}') { // Assumindo que vc tem uma variável "usuário atual" para armazenar o nome dele
-            messageDiv.innerHTML += '<div class="receive"><p style="color: #000;">' + message + '<strong>-' + sender + '</strong></p></div>';
+            messageDiv.innerHTML += '<div class="receive"><p style="color: #000;">' + message + '<strong>-IA</strong></p></div>';
         } else {
             messageDiv.innerHTML += '<div class="send"><p style="color: #000;">' + message + '</p></div>';
         }
