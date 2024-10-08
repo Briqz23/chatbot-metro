@@ -11,9 +11,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-    <div class="parent">
-        <div class="child-2">
-            <center><h2>Chats</h2></center><hr>
+
+    <!-- Menu da esquerda -->
+    <div class="container">
+        <div class="left-section">
+            <div class="logo">
+                <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li>
+                        <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
+                        <a href="#">Chat</a>
+                    </li>
+                    <li>
+                        <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
+                        <a href="#">Status das Linhas</a>
+                    </li>
+                    <li>
+                        <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
+                        <a href="#">Mapa</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- Chat (na direita) -->
+        <!-- Ver o porque as laterais tem um espaçamento em branco, e deixar o texto do Chat em branco -->
+
+        <div class="right-section">
+            <center><h2>Chat - Bem vindo ao PontoCerto, do que você precisa?</h2></center><hr>
             <div class="chat-body-parent">
                 <div class="chat-body" id="tasks">
                     <div class="message" id="chatContainer">
@@ -37,15 +64,28 @@
                     <div class="form">
                         <form action="" id="message-form" method="POST">
                             {% csrf_token %}
-                            <textarea id="msg" cols="30" name="message" rows="10" placeholder="Enter your message" required></textarea>
-                            <button class="submit" type="submit">Send</button>
+                            <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
+                            
+                            <!-- Send button with a logo inside -->
+                            <button class="send-btn" type="submit">
+                                <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
+                            </button>
+                            
+                            <!-- Additional white button with an image inside -->
+                            <button class="image-btn">
+                                <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
+                            </button>
                         </form>    
+                    </div>
+                      
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
+
 <script>
     // Quando uma nova mensagem for enviada, essa função ativa
     function scrollToBottom() {
@@ -61,12 +101,12 @@
 
     // Evento conexão (f.dev)
     socket.onopen = (event) => {
-        console.log("Conexão com WebScoket aberta!");
+        console.log("Conexão com WebSocket aberta!");
     };
 
     // Evento desconexão (f.dev)
     socket.onclose = (event) => {
-        console.log("Conexão com WebScoket fechada!");
+        console.log("Conexão com WebSocket fechada!");
     };
 
     // Form botão 'submit'
@@ -110,192 +150,239 @@
     });
 
 </script>
+
 <style>
- 
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    }
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
 
 
-    .parent {
-      background-color: #B1A296;
-    }
+/* Parte da esquerda (Logo + Menu) */
+.left-section {
+    width: 20%;
+    background-color: #131F37;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
 
-    nav {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        background-color: #659DBD;
-        padding: 10px;
-    }
+.logo-img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+}
 
-    nav ul li {
-        list-style: none;
-        display: inline-block;
-        padding: 10px;
-    }
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-    nav ul li:hover {
-        background-color: dodgerblue;
-        color: #fff;
-        transition: 0.8s;
-    }
+.menu ul li {
+    margin: 20px 0;
+}
 
-    nav ul li a {
-        text-decoration: none;
-        color: #fff;
-    }
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+    background-color: #557A95;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    text-align: center;
+}
 
-    .parent {
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-       
-        background-position: center; 
-        background-repeat: no-repeat; 
-        background-size: cover; 
-        align-items: center;
-        width: 100%;
-    }
+.menu ul li a:hover {
+    background-color: dodgerblue;
+}
 
-    .child-1 {
-        /* height: 70vh; */
+/* Parte da direita (Chat) */
+.right-section {
+    width: 80%;
+    background-color: #363636;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-body-parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-body {
+    width: 100%;
+    background-color: #505050;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.message {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.receive, .send {
+    background-color: #B1A296;
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.receive {
+    align-self: flex-start;
+}
+
+.send {
+    align-self: flex-end;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+form textarea {
+    width: 70%;
+    height: 40px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+form button {
+    width: 25%;
+    padding: 10px;
+    background-color: #1672DE;
+    border-radius: 5px;
+    border: none;
+    color: #000;
+}
+
+.menu ul li {
+    margin: 20px 0;
+    display: flex;
+    align-items: center; 
+}
+
+.menu ul li img.menu-icon {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    flex-grow: 1;
+    text-align: left;
+}
+.menu ul li a:hover {
+    background-color: #FFFFFF2E;
+}
+
+
+.child-2 h2 {
+    color: white;
+}
+
+/* CSS dos Botões Send e Microfone */
+.send-btn {
+    background-color: #1672DE;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+    background-color: darkblue;
+}
+
+
+.send-btn .send-icon {
+    width: 25px; 
+    height: 25px;
+    object-fit: contain;
+}
+
+
+.image-btn {
+    background-color: white;
+    border: none;
+    border-radius: 50%; 
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.image-btn:hover {
+    background-color: lightgray;
+}
+
+
+.icon-image {
+    width: 30px; 
+    height: 30px;
+    object-fit: contain;
+}
+
+
+.chat-body .message p {
+    color: white; 
+}
+
+
+.chat-body .message .send,
+.chat-body .message .receive {
+    color: white;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .left-section {
         width: 30%;
-        margin: 10px;
-        border-radius: 10px;
-        
-        background-color: white;
     }
 
-    .chat-room {
-        width: 100%;
-        /* max-height: ; */
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        background-color: #fff;
-        border: 1px solid dodgerblue;
-    }
-
-    .profile-pic {
-        /* height: 80px; */
-        width: 15%;
-        
-        border-radius: 50px;
-        background-color: #fff;
-    }
-
-    .profile-pic img {
-        width:100%;
-        height:100%;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .chat-room h3 {
-        color: #000;
-    }
-
-    .chat-room h3 {
-        background-color: gray;
-        padding: 10px;
-        border-radius: 5px;
-        text-decoration: none;
-    }
-
-    .chat-room h3 a {
-        text-decoration: none;
-        color: white;
-    }
-
-
-    .child-2 {
-        /* max-height: 100vh; */
-        width: 50%;
-        margin: 10px;
-        border-radius: 10px;
-        padding: 10px;
-        background-color: #FBEEC1;
-    }
-
-    .chat-body-parent {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        /* height: 60vh; */
-    }
-
-    .chat-body, .message {
-        /* max-height: 100vh; */
-        width: 100%;
-        background-color: #557A95;
-        border-radius: 10px;
-        display: flex;      
-        padding: 10px;
-        flex-direction: column;
-    }
-
-    .message {
-        max-height: 400px;  /* Or whatever height value you see fit */
-        overflow-y: auto;
-    }
-
-    .chat-body .message .receive, .send {
-        background-color: #B1A296;
-        max-width: 400px;
-       
-        border-radius: 10px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    .send:hover {
-        padding: 15px;
-        transition: 0.8s;
-    }
-
-    .receive:hover {
-        padding: 15px;
-        transition: 0.8s;
-    }
-
-    .chat-body .message .send {
-        align-self: flex-end;
-    }
-
-    .chat-body .message .receive {
-        align-self: flex-start;
-    }
-
-    form {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-    }
-
-    form textarea {
+    .right-section {
         width: 70%;
-        height: 40px;
-        border-radius: 10px;
-        padding: 10px;
     }
+}
 
-    form button {
-        width: 25%;
-        padding: 10px;
-        background-color: #FBEEC1;
-        border-radius: 5px;
-        border: none;
-        color: #000;
-    }
-    @media only screen and (max-width: 600px) {
-    .child-2 {
-        width: 100%;
-    }
-} 
+@font-face 
+{
+    font-family: 'Lemon Milk';
+    src: url("{% static 'fonts/LEMONMILK-light.otf' %}") format('truetype'); /* Fonte */
+    font-weight: normal;
+    font-style: normal;
+}
+body 
+{
+    font-family: 'Lemon Milk', sans-serif; 
+}
 
 </style>
 </html>
