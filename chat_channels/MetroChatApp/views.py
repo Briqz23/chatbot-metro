@@ -9,6 +9,10 @@ def CreateRoom(request):
         username = "user_" + secrets.token_hex(2)
         room_name = secrets.token_hex(8)
 
+        # Salva dados na session
+        request.session['room_name'] = room_name
+        request.session['username'] = username
+
         new_room, created = Room.objects.get_or_create(room_name=room_name)
         # Retorna para nova room com a função MessageView
         return redirect('room', room_name=new_room.room_name, username=username)
@@ -27,3 +31,23 @@ def MessageView(request, room_name, username):
     }
     
     return render(request, 'message.html', context)
+
+def MapaView(request):
+    room_name = request.session.get('room_name')
+    username = request.session.get('username')
+
+    context = {
+        "room_name": room_name,
+        "username": username,
+    }
+    return render(request, 'mapa.html', context)
+
+def StatusView(request):
+    room_name = request.session.get('room_name')
+    username = request.session.get('username')
+
+    context = {
+        "room_name": room_name,
+        "username": username,
+    }
+    return render(request, 'status.html', context)
