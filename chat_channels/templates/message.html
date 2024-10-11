@@ -22,15 +22,15 @@
                 <ul>
                     <li>
                         <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
-                        <a href="#">Chat</a>
+                        <a href="" onclick="event.preventDefault();">Chat</a>
                     </li>
                     <li>
                         <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
-                        <a href="#">Status das Linhas</a>
+                        <a href="{% url 'status' %}">Status das Linhas</a>
                     </li>
                     <li>
                         <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
-                        <a href="#">Mapa</a>
+                        <a href="{% url 'mapa' %}">Mapa</a>
                     </li>
                 </ul>
             </nav>
@@ -84,7 +84,6 @@
         </div>
     </div>
 </body>
-
 
 <script>
     // Quando uma nova mensagem for enviada, essa função ativa
