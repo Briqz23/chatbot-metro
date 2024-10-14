@@ -32,8 +32,14 @@
                         <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
                         <a href="{% url 'mapa' %}">Mapa</a>
                     </li>
+                    <li>
+                        <button class="red-button">
+                            <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                        </button>
+                    </li>
                 </ul>
             </nav>
+            
         </div>
         
         <!-- Chat (na direita) -->
@@ -66,12 +72,10 @@
                             {% csrf_token %}
                             <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
                             
-                            <!-- Send button with a logo inside -->
                             <button class="send-btn" type="submit">
                                 <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
                             </button>
                             
-                            <!-- Additional white button with an image inside -->
                             <button class="image-btn">
                                 <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
                             </button>
@@ -381,6 +385,61 @@ form button {
 body 
 {
     font-family: 'Lemon Milk', sans-serif; 
+}
+
+.bottom-button {
+    margin-top: auto; /* Empurra o botão para baixo */
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* Alinha o botão à esquerda */
+    }
+
+    .red-button {
+        background-color: #ff0000; /* Cor vermelha */
+        border: none;
+        border-radius: 50px;
+        padding: 10px;
+        cursor: pointer;
+        margin-left: 10px; /* Adiciona um espaçamento à esquerda */
+    }
+
+    .red-button:hover {
+        background-color: #cc0000; /* Efeito hover no botão */
+    }
+
+    .button-logo {
+        width: 30px;
+        height: auto;
+    }
+
+    .bottom-button {
+    margin-top: auto; /* Empurra o botão para o fundo */
+    width: 100%; /* Garante que o contêiner ocupe toda a largura */
+    display: flex;
+    justify-content: flex-start; /* Alinha o botão à esquerda */
+}
+
+.red-button {
+    background-color: #ff0000; /* Cor vermelha */
+    border: none;
+    border-radius: 50%; /* Faz o botão ficar circular */
+    padding: 10px;
+    cursor: pointer;
+    width: 50px; /* Define o diâmetro do botão */
+    height: 50px; /* Define o diâmetro do botão */
+    display: flex;
+    align-items: center; /* Centraliza o logo verticalmente */
+    justify-content: center; /* Centraliza o logo horizontalmente */
+    margin-left: 10px; /* Pequeno espaçamento da borda esquerda */
+}
+
+.red-button:hover {
+    background-color: #cc0000; /* Cor mais escura no hover */
+}
+
+.button-logo {
+    width: 25px; /* Tamanho do logo dentro do botão */
+    height: auto;
 }
 
 </style>

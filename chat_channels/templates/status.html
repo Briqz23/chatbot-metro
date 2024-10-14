@@ -31,6 +31,11 @@
                         <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
                         <a href="{% url 'mapa' %}">Mapa</a>
                     </li>
+                    <li>
+                        <button class="red-button">
+                            <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -134,7 +139,35 @@
     body {
         font-family: 'Lemon Milk', sans-serif; 
     }
+    .bottom-button {
+    margin-top: auto; /* Empurra o botão para o fundo */
+    width: 100%; /* Garante que o contêiner ocupe toda a largura */
+    display: flex;
+    justify-content: flex-start; /* Alinha o botão à esquerda */
+}
 
+.red-button {
+    background-color: #ff0000; /* Cor vermelha */
+    border: none;
+    border-radius: 50%; /* Faz o botão ficar circular */
+    padding: 10px;
+    cursor: pointer;
+    width: 50px; /* Define o diâmetro do botão */
+    height: 50px; /* Define o diâmetro do botão */
+    display: flex;
+    align-items: center; /* Centraliza o logo verticalmente */
+    justify-content: center; /* Centraliza o logo horizontalmente */
+    margin-left: 10px; /* Pequeno espaçamento da borda esquerda */
+}
+
+.red-button:hover {
+    background-color: #cc0000; /* Cor mais escura no hover */
+}
+
+.button-logo {
+    width: 25px; /* Tamanho do logo dentro do botão */
+    height: auto;
+}
 </style>
 
 </html>
