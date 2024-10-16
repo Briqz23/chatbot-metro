@@ -87,17 +87,6 @@ body {
     }
 }
 
-@font-face {
-    font-family: 'Lemon Milk';
-    src: url("{% static 'fonts/LEMONMILK-light.otf' %}") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-body {
-    font-family: 'Lemon Milk', sans-serif;
-}
-
 .bottom-button {
     margin-top: auto;
     width: 100%;
