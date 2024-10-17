@@ -1,0 +1,231 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Lemon Milk';
+    src: url('../fonts/LEMONMILK-light.otf') format('truetype'); /* Fonte */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Lemon Milk', sans-serif; 
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Parte da esquerda (Logo + Menu) */
+.left-section {
+    width: 20%;
+    background-color: #131F37;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo-img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.menu ul li img.menu-icon {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.menu ul li a:hover {
+    background-color: #FFFFFF2E;
+}
+
+/* Parte da direita (Chat) */
+.right-section {
+    width: 80%;
+    background-color: #363636;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 600px) {
+    .left-section {
+        width: 30%;
+    }
+
+    .right-section {
+        width: 70%;
+    }
+}
+
+.bottom-button {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.red-button {
+    background-color: #ff0000;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.red-button:hover {
+    background-color: #cc0000;
+}
+
+.button-logo {
+    width: 25px;
+    height: auto;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+form textarea {
+    width: 70%;
+    height: 40px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+form button {
+    width: 25%;
+    padding: 10px;
+    background-color: #1672DE;
+    border-radius: 5px;
+    border: none;
+    color: #000;
+}
+
+/* Estilos para mensagens */
+.chat-body-parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-body {
+    width: 100%;
+    background-color: #505050;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.message {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.receive, .send {
+    background-color: #B1A296;
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.receive {
+    align-self: flex-start;
+}
+
+.send {
+    align-self: flex-end;
+}
+
+.send-btn {
+    background-color: #1672DE;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+    background-color: darkblue;
+}
+
+.send-btn .send-icon {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.image-btn {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.image-btn:hover {
+    background-color: lightgray;
+}
+
+.icon-image {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.chat-body .message p {
+    color: white;
+}
+
+.chat-body .message .send,
+.chat-body .message .receive {
+    color: white;
+}

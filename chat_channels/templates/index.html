@@ -5,19 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <title>Entrar Sala</title>
-    <style>
-        @font-face {
-            font-family: 'Lemon Milk';
-            src: url("{% static 'fonts/LEMONMILK-light.otf' %}") format('truetype'); /* Fonte */
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            font-family: 'Lemon Milk', sans-serif; 
-        }
-    </style>
 </head>
 <body>
     <div class="parent">
@@ -38,51 +27,4 @@
         });
     </script>
 </body>
-<style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    .parent {
-        background-color: #131F37;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .child {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: #131F37;
-        height: 80vh;
-        width: 50%;
-        border-radius: 10px;
-        text-align: center;
-    }
-
-    form {
-        width: 80%;
-    }
-
-    button {
-        background-color: transparent; 
-        color: white; /* Cor da Botão Sessão */
-        padding: 5px; 
-        border: 2px solid #131F37; /* Cor da borda */
-        border-radius: 5px;
-        width: 100%;
-        margin-top: 0px;
-    }
-
-    button:hover {
-        padding: 10px; 
-        transition: 0.5s; 
-    }
-</style>
 </html>

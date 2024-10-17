@@ -6,13 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'caminho.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
     <title>Status das linhas</title>
 </head>
 <body>
 
     <!-- Menu da esquerda -->
-    <div class="container">
         <div class="left-section">
             <div class="logo">
                 <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
@@ -31,110 +30,19 @@
                         <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
                         <a href="{% url 'mapa' %}">Mapa</a>
                     </li>
+                    <li>
+                        <button class="red-button">
+                            <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
-
         <div class="right-section">
-            
         </div>
-    </div>
 </body>
 
 <script>
 
 </script>
-
-<style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    .container {
-        display: flex;
-        height: 100vh;
-    }
-
-    /* Parte da esquerda (Logo + Menu) */
-    .left-section {
-        width: 20%;
-        background-color: #131F37;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-    }
-
-    .logo-img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 5px;
-    }
-
-    .menu ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .menu ul li {
-        margin: 20px 0;
-        display: flex;
-        align-items: center; 
-    }
-
-    .menu ul li img.menu-icon {
-        width: 20px;
-        height: auto;
-        margin-right: 10px;
-    }
-
-    .menu ul li a {
-        text-decoration: none;
-        color: white;
-        background-color: transparent;
-        padding: 10px;
-        display: block;
-        border-radius: 5px;
-        flex-grow: 1;
-        text-align: left;
-    }
-
-    .menu ul li a:hover {
-        background-color: #FFFFFF2E;
-    }
-
-    /* Parte da direita (Chat) */
-    .right-section {
-        width: 80%;
-        background-color: #363636;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    @media only screen and (max-width: 600px) {
-        .left-section {
-            width: 30%;
-        }
-
-        .right-section {
-            width: 70%;
-        }
-    }
-
-    @font-face {
-        font-family: 'Lemon Milk';
-        src: url("{% static 'fonts/LEMONMILK-light.otf' %}") format('truetype'); /* Fonte */
-        font-weight: normal;
-        font-style: normal;
-    }
-
-    body {
-        font-family: 'Lemon Milk', sans-serif; 
-    }
-
-</style>
-
 </html>
