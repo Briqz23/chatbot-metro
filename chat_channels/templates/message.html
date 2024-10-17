@@ -13,80 +13,77 @@
 <body>
 
     <!-- Menu da esquerda -->
-    <div class="container">
-        <div class="left-section">
-            <div class="logo">
-                <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Menu da esquerda -->
+            <div class="col-md-3 left-section">
+                <div class="logo">
+                    <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+                </div>
+                <nav class="menu">
+                    <ul>
+                        <li>
+                            <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
+                            <a href="" onclick="event.preventDefault();">Chat</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
+                            <a href="{% url 'status' %}">Status das Linhas</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
+                            <a href="{% url 'mapa' %}">Mapa</a>
+                        </li>
+                        <li>
+                            <button class="red-button">
+                                <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <nav class="menu">
-                <ul>
-                    <li>
-                        <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
-                        <a href="" onclick="event.preventDefault();">Chat</a>
-                    </li>
-                    <li>
-                        <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
-                        <a href="{% url 'status' %}">Status das Linhas</a>
-                    </li>
-                    <li>
-                        <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
-                        <a href="{% url 'mapa' %}">Mapa</a>
-                    </li>
-                    <li>
-                        <button class="red-button">
-                            <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
-                        </button>
-                    </li>
-                </ul>
-            </nav>
             
-        </div>
-        
-        <!-- Chat (na direita) -->
-        <!-- Ver o porque as laterais tem um espaçamento em branco, e deixar o texto do Chat em branco -->
+            <!-- Chat (na direita) -->
+            <div class="col-md-9 right-section">
+                <center><h2>Chat - Bem vindo ao PontoCerto, do que você precisa?</h2></center><hr>
+                <div class="chat-body-parent">
+                    <div class="chat-body" id="tasks">
+                        <div class="message" id="chatContainer">
+                            <!-- Mensagens recebidas abaixo -->
+                            {% for i in messages %}
+                                {% if i.sender != user %}
+                                    <div class="receive">
+                                        <p style="color: #000;"> {{ i.message }}<strong>-IA</strong></p>
+                                    </div>
+                                {% else %}
+                                    <div class="send">
+                                        <p style="color: #000;">{{ i.message }}</p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
 
-        <div class="right-section">
-            <center><h2>Chat - Bem vindo ao PontoCerto, do que você precisa?</h2></center><hr>
-            <div class="chat-body-parent">
-                <div class="chat-body" id="tasks">
-                    <div class="message" id="chatContainer">
-                      <!-- Mensagens recebidas abaixo -->
-                        <!-- "loop" pelas mensagens -->
-                        {% for i in messages %}
-                            <!-- mensagem diferente do usuário logado -->
-                            {% if i.sender != user %}
-                                <div class="receive">
-                                    <p style="color: #000;"> {{ i.message }}<strong>-IA</strong></p>
-                                </div>
-                            {% else %}
-                                <div class="send">
-                                    <p style="color: #000;">{{ i.message }}</p>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    <!-- Fim mensagens recebidas -->
-                    </div>
-
-                    <div class="form">
-                        <form action="" id="message-form" method="POST">
-                            {% csrf_token %}
-                            <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
-                            
-                            <button class="send-btn" type="submit">
-                                <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
-                            </button>
-                            
-                            <button class="image-btn">
-                                <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
-                            </button>
-                        </form>    
-                    </div>
-                      
+                        <div class="form">
+                            <form action="" id="message-form" method="POST">
+                                {% csrf_token %}
+                                <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
+                                
+                                <button class="send-btn" type="submit">
+                                    <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
+                                </button>
+                                
+                                <button class="image-btn">
+                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
+                                </button>
+                            </form>    
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 
 <script>
