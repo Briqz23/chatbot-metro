@@ -56,7 +56,7 @@
                     <ul>
                         <li>
                             <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
-                            <a href="" onclick="event.preventDefault();">Chat</a>
+                            <a href="{% url 'room' room_name=room_name username=username %}">Chat</a>
                         </li>
                         <li>
                             <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
@@ -64,7 +64,7 @@
                         </li>
                         <li>
                             <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
-                            <a href="{% url 'mapa' %}">Mapa</a>
+                            <a href="" onclick="event.preventDefault();">Mapa</a>
                         </li>
                         <li>
                             <button class="red-button">
