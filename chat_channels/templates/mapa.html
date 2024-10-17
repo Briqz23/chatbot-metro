@@ -8,38 +8,122 @@
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     <title>Mapa linhas</title>
+
+    <!-- STYLE PRA RETIRAR DEPOIS -->
+    <style>
+        .image-container {
+          width: 300px;
+          height: 480px;
+          overflow: hidden;
+          border: 2px solid #000;
+          position: relative;
+          cursor: grab;
+        }
+    
+        .image-container img {
+          position: absolute;
+          width: 100%;
+          height: auto;
+          transition: transform 0.3s ease;
+        }
+    
+        .buttons {
+          display: flex;
+          gap: 10px;
+          margin-top: 10px;
+        }
+    
+        .buttons button {
+          padding: 10px;
+          font-size: 16px;
+          cursor: pointer;
+        }
+    </style>
+
+
 </head>
 <body>
 
-    <!-- Menu da esquerda -->
-        <div class="left-section">
-            <div class="logo">
-                <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Menu da esquerda -->
+            <div class="col-md-3 left-section">
+                <div class="logo">
+                    <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+                </div>
+                <nav class="menu">
+                    <ul>
+                        <li>
+                            <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
+                            <a href="" onclick="event.preventDefault();">Chat</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
+                            <a href="{% url 'status' %}">Status das Linhas</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
+                            <a href="{% url 'mapa' %}">Mapa</a>
+                        </li>
+                        <li>
+                            <button class="red-button">
+                                <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <nav class="menu">
-                <ul>
-                    <li>
-                        <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
-                        <a href="{% url 'room' room_name=room_name username=username %}">Chat</a>
-                    </li>
-                    <li>
-                        <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
-                        <a href="{% url 'status' %}">Status das Linhas</a>
-                    </li>
-                    <li>
-                        <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
-                        <a href="" onclick="event.preventDefault();">Mapa</a>
-                    </li>
-                    <li>
-                        <button class="red-button">
-                            <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+            
+            <!-- Menu direita -->
+            <div class="col-md-9 right-section">
+
+
+                <!-- Render MAPA -->
+                <div class="image-container">
+                    <img id="zoomable-image" src="{% static 'images/MapaMetro.png' %}" alt="Imagem para zoom">
+                </div>
+                
+                <div class="buttons">
+                    <button onclick="zoomIn()">Zoom In</button>
+                    <button onclick="zoomOut()">Zoom Out</button>
+                    <button onclick="neutralPosition()">Neutro</button>
+                </div>
+
+                <!-- Funções de Zoom -->
+                <script>
+
+                    let scale = 1;
+                    const img = document.getElementById("zoomable-image");
+                
+                    //ZOOM IN
+                    function zoomIn() {
+                      scale += 0.8;  // Aumenta a escala em 0.1
+                      img.style.transform = `scale(${scale})`;
+                    }
+                
+                    //ZOOM OUT
+                    function zoomOut() {
+                      if (scale > 1) {  // Impede que o zoom out vá além do tamanho original
+                        scale -= 0.8;  // Diminui a escala em 0.1
+                        img.style.transform = `scale(${scale})`;
+                      }
+                    }
+            
+                    //ZOOM NEUTRO
+                    function neutralPosition(){
+                        scale = 1
+                        img.style.transform = `scale(${scale})`;
+                    }
+            
+                </script>
+
+
+            </div>
+
         </div>
-        <div class="right-section">
     </div>
+
 </body>
 
 <script>
