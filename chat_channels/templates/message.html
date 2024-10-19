@@ -106,7 +106,7 @@
 
     // Evento desconexão (f.dev)
     socket.onclose = (event) => {
-        console.log("Conexão com WebSocket fechada!");
+        window.location.href = '/';
     };
 
     // Form botão 'submit'
@@ -148,6 +148,12 @@
         }
         scrollToBottom();
     });
+
+    document.querySelector('.red-button').addEventListener('click', function() {
+        socket.send(JSON.stringify({ 'action': 'close' }));
+        socket.close();
+        console.log("Conexão com WebSocket fechada!")
+    })
 
 </script>
 

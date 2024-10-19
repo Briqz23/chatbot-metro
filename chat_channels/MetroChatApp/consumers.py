@@ -10,17 +10,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # front conecta com esse socket (consumidor)
     async def connect(self):
         self.room_name = f"room_{self.scope['url_route']['kwargs']['room_name']}"
+        self.disconnected_by_user = False
         await self.accept()
         
     # Desconecta "cliente"
     async def disconnect(self, close_code):
         # Lógica por tempo (2 horas) inserir aqui possivelmente
         await self.channel_layer.group_discard(self.room_name, self.channel_name)
+        if self.disconnected_by_user:
+            await self.close_chat()
 
     # Método receive (GET do javascript Form botão 'submit')
     # Processa a 'message' e ativa resposta da IA
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
+        if 'action' in text_data_json and text_data_json['action'] == 'close':
+            self.disconnected_by_user = True
+            return
         message = text_data_json
         message_unica = text_data_json['message']
         room_name = text_data_json['room_name']
@@ -66,3 +72,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not Message.objects.filter(message=data['message']).exists():
             new_message = Message(room=get_room_by_name, sender=data['sender'], message=data['message'])
             new_message.save()
+
+    @database_sync_to_async
+    def close_chat(self):
+        try:
+            room = Room.objects.get(room_name=self.room_name.replace("room_", ""))
+            # Apaga room e messages
+            Message.objects.filter(room=room).delete()
+            room.delete()
+        except Room.DoesNotExist:
+            pass
