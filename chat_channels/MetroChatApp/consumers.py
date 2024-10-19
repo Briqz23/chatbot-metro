@@ -22,6 +22,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json
+        message_unica = text_data_json['message']
+        room_name = text_data_json['room_name']
+        sender = text_data_json['sender']
         
         # Simulador de resposta de IA
         resposta_ia = simula_resposta_ia(message)
@@ -39,6 +42,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'sender': 'IA'
             }
         }))
+
+        # Armazenando as mensagens no BD
+        await self.create_message({
+            'message': message_unica,
+            'room_name': room_name,
+            'sender': sender
+        })
+
+        await self.create_message({
+            'message': resposta_ia,
+            'room_name': room_name,
+            'sender': 'IA'
+        })
     
     # "Falando" para o django que estamos praticando manipulação de dados 
     @database_sync_to_async
@@ -50,4 +66,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not Message.objects.filter(message=data['message']).exists():
             new_message = Message(room=get_room_by_name, sender=data['sender'], message=data['message'])
             new_message.save()
-    
