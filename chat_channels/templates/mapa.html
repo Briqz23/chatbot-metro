@@ -78,7 +78,6 @@
             <!-- Menu direita -->
             <div class="col-md-9 right-section">
 
-
                 <!-- Render MAPA -->
                 <div class="image-container">
                     <img id="zoomable-image" src="{% static 'images/MapaMetro.png' %}" alt="Imagem para zoom">
@@ -89,44 +88,37 @@
                     <button onclick="zoomOut()">Zoom Out</button>
                     <button onclick="neutralPosition()">Neutro</button>
                 </div>
-
-                <!-- Funções de Zoom -->
-                <script>
-
-                    let scale = 1;
-                    const img = document.getElementById("zoomable-image");
-                
-                    //ZOOM IN
-                    function zoomIn() {
-                      scale += 0.8;  // Aumenta a escala em 0.1
-                      img.style.transform = `scale(${scale})`;
-                    }
-                
-                    //ZOOM OUT
-                    function zoomOut() {
-                      if (scale > 1) {  // Impede que o zoom out vá além do tamanho original
-                        scale -= 0.8;  // Diminui a escala em 0.1
-                        img.style.transform = `scale(${scale})`;
-                      }
-                    }
-            
-                    //ZOOM NEUTRO
-                    function neutralPosition(){
-                        scale = 1
-                        img.style.transform = `scale(${scale})`;
-                    }
-            
-                </script>
-
-
             </div>
-
         </div>
     </div>
 
 </body>
 
 <script>
-
+    // Funções de Zoom 
+    let scale = 1;
+    const img = document.getElementById("zoomable-image");
+                
+    //ZOOM IN
+    function zoomIn() {
+        scale += 0.8;  // Aumenta a escala em 0.1
+        img.style.transform = `scale(${scale})`;
+    }
+                
+                    //ZOOM OUT
+    function zoomOut() {
+        if (scale > 1) {  // Impede que o zoom out vá além do tamanho original
+        scale -= 0.8;  // Diminui a escala em 0.1
+        img.style.transform = `scale(${scale})`;
+        }
+    }
+            
+    //ZOOM NEUTRO
+    function neutralPosition(){
+        scale = 1
+        img.style.transform = `scale(${scale})`;
+    }
+            
 </script>
+
 </html>

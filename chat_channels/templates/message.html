@@ -104,11 +104,6 @@
         console.log("Conexão com WebSocket aberta!");
     };
 
-    // Evento desconexão (f.dev)
-    socket.onclose = (event) => {
-        window.location.href = '/';
-    };
-
     // Form botão 'submit'
     document.getElementById('message-form').addEventListener('submit', function(event){
         // Previni a página de recarregar
@@ -152,10 +147,10 @@
     document.querySelector('.red-button').addEventListener('click', function() {
         socket.send(JSON.stringify({ 'action': 'close' }));
         socket.close();
+        window.location.href = '/';
         console.log("Conexão com WebSocket fechada!")
     })
 
 </script>
-
 
 </html>
