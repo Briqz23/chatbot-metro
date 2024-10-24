@@ -55,7 +55,7 @@ def obter_informacoes_metro():
 
 situacao_linhas, faq_metro, achados_info = obter_informacoes_metro()
 
-with open('informacoes_metro.txt', 'w', encoding='utf-8') as file:
+with open('MetroChatAPP/ia_scripts/informacoes_metro.txt', 'w', encoding='utf-8') as file:
     file.write("Situação das Linhas do Metrô:\n")
     for linha in situacao_linhas:
         file.write(f"Linha: {linha['linha-numero']} - {linha['linha-nome']}\n")
@@ -73,4 +73,4 @@ with open('informacoes_metro.txt', 'w', encoding='utf-8') as file:
         file.write(f"{achado}\n")
         file.write('-' * 80 + '\n')
 
-print("Arquivo 'informacoes_metro.txt' criado com sucesso.")
+print("Arquivo 'informacoes_metro.txt' criado com sucesso na pasta ia_scripts.")
