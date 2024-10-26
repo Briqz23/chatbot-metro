@@ -1,23 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
+from datetime import datetime
 
 def obter_informacoes_metro():
-    html_linhas = requests.get("https://www.metro.sp.gov.br/wp-content/themes/metrosp/direto-metro.php?embed=1").content
-    soup_linhas = BeautifulSoup(html_linhas, 'html.parser')
-
-    linha_nomes = soup_linhas.find_all('div', class_='linha-nome')
-    linha_situacao = soup_linhas.find_all('div', class_='linha-situacao')
-    linha_numero = soup_linhas.find_all('div', class_='linha-numero')
-
-    linhas = []
-    for numero, nome, situacao in zip(linha_numero, linha_nomes, linha_situacao):
-        linha_info = {
-            'linha-numero': numero.text.strip(),
-            'linha-nome': nome.text.strip(),
-            'linha-situacao': situacao.text.strip()
-        }
-        linhas.append(linha_info)
-
     html_faq = requests.get("https://www.metro.sp.gov.br/fale-conosco/faq/").content
     soup_faq = BeautifulSoup(html_faq, 'html.parser')
 
@@ -50,17 +35,41 @@ def obter_informacoes_metro():
     for texto in achados_textos:
         achados_info.append(texto.get_text(strip=True))
 
-    return linhas, perguntas_respostas, achados_info
+    return perguntas_respostas, achados_info
 
+def obter_status_metro():
+    with requests.Session() as session:
+        response = session.get("https://www.metro.sp.gov.br/wp-content/themes/metrosp/direto-metro.php?embed=1")
 
-situacao_linhas, faq_metro, achados_info = obter_informacoes_metro()
+    soup_linhas = BeautifulSoup(response.content, 'html.parser')
+    hora_request = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-with open('MetroChatAPP/ia_scripts/informacoes_metro.txt', 'w', encoding='utf-8') as file:
+    linhas = []
+    for linha_info in soup_linhas.select('.linha'):
+        numero = linha_info.select_one('.linha-numero').text.strip()
+        nome = linha_info.select_one('.linha-nome').text.strip()
+        situacao = linha_info.select_one('.linha-situacao').text.strip()
+
+        linha_dados = {
+            'linha_numero': numero,
+            'linha_nome': nome,
+            'linha_situacao': situacao
+        }
+        linhas.append(linha_dados)
+
+    return linhas, hora_request
+
+faq_metro, achados_info = obter_informacoes_metro()
+linhas, hora_agora = obter_status_metro()
+print(f'{linhas}\n{hora_agora}')
+
+with open('MetroChatApp/ia_scripts/informacoes_metro.txt', 'w', encoding='utf-8') as file:
     file.write("Situação das Linhas do Metrô:\n")
-    for linha in situacao_linhas:
-        file.write(f"Linha: {linha['linha-numero']} - {linha['linha-nome']}\n")
-        file.write(f"Situação: {linha['linha-situacao']}\n")
+    for linha in linhas:
+        file.write(f"Linha: {linha['linha_numero']} - {linha['linha_nome']}\n")
+        file.write(f"Situação: {linha['linha_situacao']}\n")
         file.write('-' * 80 + '\n')
+    file.write(f"Última atualização: {hora_agora}\n")
 
     file.write("\nPerguntas Frequentes do Metrô:\n")
     for faq in faq_metro:

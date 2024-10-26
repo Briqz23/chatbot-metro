@@ -37,6 +37,7 @@ pytz==2023.3.post1
 requests==2.32.3
 requests-oauthlib==2.0.0
 service-identity==24.1.0
+setuptools==75.2.0
 six==1.16.0
 soupsieve==2.6
 sqlparse==0.4.4

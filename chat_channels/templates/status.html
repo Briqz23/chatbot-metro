@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     <title>Status das linhas</title>
 </head>
+
 <body>
 
     <div class="container-fluid">
@@ -44,7 +46,13 @@
 
             <!-- Menu direita -->
             <div class="right-section">
-                
+                {% for linha in linhas %}
+                <div>
+                    <h1>{{ linha.linha_numero }} Linha {{ linha.linha_nome }}</h1>
+                    <p>Status: {{ linha.linha_situacao }}</p>
+                </div>
+                {% endfor %}
+                <p>Atualizado: {{ hora_agora }}</p>
             </div>
         </div>
     </div>

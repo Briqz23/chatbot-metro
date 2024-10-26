@@ -20,7 +20,7 @@ function resetTimer() {
         socket.close() 
         window.location.href = '/'
         console.log("Usuário desconectado por inatividade!")
-    }, 20000)
+    }, 60000)
 }
 
 window.onload = resetTimer
