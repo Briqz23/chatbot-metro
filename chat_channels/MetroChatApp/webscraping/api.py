@@ -61,7 +61,6 @@ def obter_status_metro():
 
 faq_metro, achados_info = obter_informacoes_metro()
 linhas, hora_agora = obter_status_metro()
-print(f'{linhas}\n{hora_agora}')
 
 with open('MetroChatApp/ia_scripts/informacoes_metro.txt', 'w', encoding='utf-8') as file:
     file.write("Situação das Linhas do Metrô:\n")
