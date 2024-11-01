@@ -27,17 +27,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if 'action' in text_data_json and text_data_json['action'] == 'close':
             self.disconnected_by_user = True
             return
-        message = text_data_json
+        message_obj = text_data_json
         message_unica = text_data_json['message']
         room_name = text_data_json['room_name']
         sender = text_data_json['sender']
         
         # Simulador de resposta de IA
-        resposta_ia = simula_resposta_ia(message)
+        resposta_ia = simula_resposta_ia(message_unica)
 
         # Enviar mensagem do usuário no front
         await self.send(text_data=json.dumps({
-            'message': message,
+            'message': message_obj,
             'sender': 'user'
         }))
 

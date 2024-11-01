@@ -23,10 +23,6 @@ def CreateRoom(request):
 def MessageView(request, room_name, username):
     get_room = Room.objects.get(room_name=room_name)
     get_messages = Message.objects.filter(room=get_room)
-    
-    linhas, hora_agora = obter_status_metro()
-    request.session['linhas'] = linhas
-    request.session['hora_agora'] = hora_agora
 
     # Response para o front(js)
     context = {
@@ -50,8 +46,7 @@ def MapaView(request):
 def StatusView(request):
     room_name = request.session.get('room_name')
     username = request.session.get('username')
-    linhas = request.session.get('linhas')
-    hora_agora = request.session.get('hora_agora')
+    linhas, hora_agora = obter_status_metro()
 
     context = {
         "room_name": room_name,
