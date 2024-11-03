@@ -2,8 +2,9 @@
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from openai import OpenAI
+import random
 
-def simula_resposta_ia(message):
+def teste_com_ia(message):
     load_dotenv() 
     client = OpenAI()
     model = ChatOpenAI(
@@ -26,7 +27,9 @@ def simula_resposta_ia(message):
     print(str(res))
     return res
 
-simula_resposta_ia('oi')
+# teste_com_ia('oi')
 
 
-
+def simula_resposta_ia(message_unica):
+    res = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(10))
+    return res
