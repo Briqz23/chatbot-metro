@@ -1,7 +1,0 @@
-langchain-community
-langchain
-langhchain-openai
-faiss-cpu
-langchain-redis
-redis==3.5.3
-redisearchs
