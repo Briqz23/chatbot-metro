@@ -42,7 +42,7 @@ def obter_status_metro():
         response = session.get("https://www.metro.sp.gov.br/wp-content/themes/metrosp/direto-metro.php?embed=1")
 
     soup_linhas = BeautifulSoup(response.content, 'html.parser')
-    hora_request = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    hora_request = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     linhas = []
     for linha_info in soup_linhas.select('.linha'):

@@ -43,20 +43,36 @@
                     </ul>
                 </nav>
             </div>
-
             <!-- Menu direita -->
             <div class="right-section">
-                {% for linha in linhas %}
-                <div>
-                    <h1>{{ linha.linha_numero }} Linha {{ linha.linha_nome }}</h1>
-                    <p>Status: {{ linha.linha_situacao }}</p>
+                <div id="linha-status">
+                    <div class="pt-4 d-flex">
+                        <h2 class="text-primary status pe-4">Carregando Status das Linhas...</h2>
+                        <div class="spinner-border spinner-border-lg text-primary" role="status" aria-hidden="true">
+                    </div>
                 </div>
-                {% endfor %}
-                <p>Atualizado: {{ hora_agora }}</p>
             </div>
         </div>
     </div>
 </body>
+
+<script>
+    function atualizarLinhas() {
+            fetch("{% url 'status_metro_api' %}")  // Rota Endpoint API
+                .then(response => response.json())
+                .then(data => {
+                    let html = "";
+                    data.linhas.forEach(linha => {
+                        html += `<h1>${linha.linha_numero} ${linha.linha_nome}: ${linha.linha_situacao}</h1>`;
+                    });
+                    html += `<p>Atualizado: ${data.hora_agora}</p>`;
+                    document.getElementById("linha-status").innerHTML = html;
+                })
+                .catch(error => console.error("Erro ao carregar dados:", error));
+    }
+    // Chama ao carregar a página
+    document.addEventListener("DOMContentLoaded", atualizarLinhas);
+</script>
 
 <script src="{% static 'js/monitor.js' %}"></script>
 
