@@ -20,11 +20,13 @@ djangorestframework-simplejwt==5.3.0
 hyperlink==21.0.0
 idna==3.9
 incremental==24.7.2
+langchain-openai==0.2.6
 node==1.2.1
 nodejs==0.1.1
 numpy==2.0.0
 oauthlib==3.2.2
 odict==1.9.0
+openai==1.54.3
 optional-django==0.1.0
 plumber==1.7
 psycopg2==2.9.9
@@ -33,6 +35,7 @@ pyasn1_modules==0.4.1
 pycparser==2.22
 PyJWT==2.8.0
 pyOpenSSL==24.2.1
+python-dotenv==1.0.1
 pytz==2023.3.post1
 requests==2.32.3
 requests-oauthlib==2.0.0
@@ -54,5 +57,3 @@ zope.hookable==6.0
 zope.interface==6.2
 zope.lifecycleevent==5.0
 zope.proxy==5.2
-openai
-python-dotenv
