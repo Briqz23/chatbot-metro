@@ -56,23 +56,117 @@
     </div>
 </body>
 
+<div id="linha-status"></div>
+
+<style>
+    /* Define uma classe para cada linha com sua respectiva cor */
+    .linha-1 { background-color: #171796; }
+    .linha-2 { background-color: #007a5e; }
+    .linha-3 { background-color: #ed2e38; }
+    .linha-4 { background-color: #ffd325; }
+    .linha-5 { background-color: #ba1fb5; }
+    .linha-15 { background-color: #8f8f8c; }
+    /* Adicione mais classes conforme necessário para cada linha */
+
+    .linha-numero {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        color: white; /* Garante o texto branco */
+        font-weight: bold;
+        text-align: center;
+        line-height: 50px;
+        margin-right: 15px; /* Espaçamento entre o quadrado e o texto */
+        border-radius: 5px; /* Borda arredondada */
+        vertical-align: middle; /* Alinha verticalmente com o texto */
+        font-size: 30px;
+    }
+
+    /* Garante que o texto da linha também esteja branco e define a separação */
+    #linha-status div {
+        color: white;
+        margin-bottom: 20px; /* Espaço maior entre cada linha */
+        font-size: 30px;
+        border-bottom: 1px solid white; /* Linha separadora branca */
+        padding-bottom: 10px; /* Espaçamento extra */
+        display: flex;
+        align-items: center; /* Alinha os itens na mesma linha */
+    }
+
+    /* Remove a linha separadora do último elemento */
+    #linha-status div:last-child {
+        border-bottom: none;
+    }
+
+    /* Estilo da bola de status */
+    .status-bola {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 20px; /* Espaço entre o status e o nome */
+        vertical-align: middle;
+    }
+    
+    /* Cor verde para operação normal */
+    .status-bola.verde {
+        background-color: #00FF00;
+    }
+    
+    /* Cor vermelha para operação interrompida */
+    .status-bola.vermelha {
+        background-color: #FF0000;
+    }
+
+    /* Ajusta o alinhamento do nome e operação */
+    .linha-nome {
+        flex-grow: 1; /* Faz o nome da linha crescer e ocupar o espaço */
+        font-weight: bold;
+        text-align: left; /* Alinha o nome à esquerda */
+    }
+
+    .linha-status {
+        font-size: 28px; /* Ajuste no tamanho do texto de operação */
+        margin-left: 10px; /* Espaço entre o nome e o status */
+        text-align: center; /* Centraliza o texto de operação */
+    }
+</style>
+
 <script>
     function atualizarLinhas() {
-            fetch("{% url 'status_metro_api' %}")  // Rota Endpoint API
-                .then(response => response.json())
-                .then(data => {
-                    let html = "";
-                    data.linhas.forEach(linha => {
-                        html += `<h1>${linha.linha_numero} ${linha.linha_nome}: ${linha.linha_situacao}</h1>`;
-                    });
-                    html += `<p>Atualizado: ${data.hora_agora}</p>`;
-                    document.getElementById("linha-status").innerHTML = html;
-                })
-                .catch(error => console.error("Erro ao carregar dados:", error));
+        fetch("{% url 'status_metro_api' %}")  // Rota Endpoint API
+            .then(response => response.json())
+            .then(data => {
+                let html = "";
+                data.linhas.forEach(linha => {
+                    // Define a classe de cor com base no número da linha
+                    let corClasse = `linha-${linha.linha_numero}`;
+                    
+                    // Define a cor da bola de status
+                    let statusClasse = linha.linha_situacao === "Operação Normal" ? "verde" : "vermelha";
+
+                    html += `
+                        <div>
+                            <span class="linha-numero ${corClasse}">${linha.linha_numero}</span>
+                            <span class="linha-nome">${linha.linha_nome}</span>
+                            <span class="linha-status">${linha.linha_situacao}</span>
+                            <span class="status-bola ${statusClasse}"></span>
+                        </div>
+                    `;
+                });
+                html += `<p>Atualizado: ${data.hora_agora}</p>`;
+                document.getElementById("linha-status").innerHTML = html;
+            })
+            .catch(error => console.error("Erro ao carregar dados:", error));
     }
+
     // Chama ao carregar a página
     document.addEventListener("DOMContentLoaded", atualizarLinhas);
 </script>
+
+
+
+
 
 <script src="{% static 'js/monitor.js' %}"></script>
 
