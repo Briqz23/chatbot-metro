@@ -275,3 +275,10 @@ form button {
 .chat-body .message .receive {
     color: white;
 }
+
+.welcome-container {
+    /* Aqui vão os estilos personalizados para o container da mensagem de boas-vindas */
+    background-color: #505050;
+    padding: 15px;
+    border-radius: 8px;
+}

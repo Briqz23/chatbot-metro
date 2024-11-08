@@ -44,119 +44,127 @@
             </div>
             
             <!-- Chat (na direita) -->
-            <div class="col-md-9 right-section">
-                <center><h2>Bem vindo ao PontoCerto, do que você precisa?</h2></center><hr>
-                <div class="chat-body-parent">
-                    <div class="chat-body" id="tasks">
-                        <div class="message" id="chatContainer">
-                            <!-- Mensagens recebidas abaixo -->
-                            {% for i in messages %}
-                                {% if i.sender != user %}
-                                    <div class="receive">
-                                        <p style="color: #000;"> {{ i.message }}<strong>-IA</strong></p>
-                                    </div>
-                                {% else %}
-                                    <div class="send">
-                                        <p style="color: #000;">{{ i.message }}</p>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+<!-- Chat (na direita) -->
+<div class="col-md-9 right-section">
+    <!-- Container separado para a mensagem de boas-vindas -->
+    <div class="welcome-container">
+        <center><h2>Bem vindo ao PontoCerto, do que você precisa?</h2></center>
+    </div>
+    
+    <div class="chat-body-parent">
+        <div class="chat-body" id="tasks">
+            <div class="message" id="chatContainer">
+                <!-- Mensagens recebidas abaixo -->
+                {% for i in messages %}
+                    {% if i.sender != user %}
+                        <div class="receive">
+                            <p style="color: #000;">{{ i.message }}<strong>-IA</strong></p>
                         </div>
+                    {% else %}
+                        <div class="send">
+                            <p style="color: #000;">{{ i.message }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
 
-                        <div class="form">
-                            <form action="" id="message-form" method="POST">
-                                {% csrf_token %}
-                                <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
-                                
-                                <button class="send-btn" type="submit">
-                                    <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
-                                </button>
-                                
-                                <button class="image-btn">
-                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
-                                </button>
-                            </form>    
-                        </div>
-                    </div>
-                </div>
+            <div class="form">
+                <form action="" id="message-form" method="POST">
+                    {% csrf_token %}
+                    <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
+                    
+                    <button class="send-btn" type="submit">
+                        <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
+                    </button>
+                    
+                    <button class="image-btn">
+                        <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
+                    </button>
+                </form>    
             </div>
         </div>
     </div>
+</div>
+
+
 
 </body>
 
 <script>
-    // Quando uma nova mensagem for enviada, essa função ativa
-    function scrollToBottom() {
-        var chatContainer = document.getElementById("chatContainer");
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    // Verifica o protocolo e define Endpoint
-    const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-    // Cria a URL do Endpoint para relacionar com o routing.py 
-    const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
-    const socket = new WebSocket(wsEndpoint);
-
-    // Evento conexão (f.dev)
-    socket.onopen = (event) => {
-        console.log("Conexão com WebSocket aberta!");
-    };
-
-    // Form botão 'submit'
-    document.getElementById('message-form').addEventListener('submit', function(event){
-        // Previni a página de recarregar
-        event.preventDefault();
-        // Envia msg para consumers no back
-        const message = document.getElementById('msg').value;
-        socket.send(
-            JSON.stringify({
-                'message': message,
-                'room_name': '{{room_name}}',
-                'sender': '{{user}}',
-            })
-        );
-    });
-
-    // Res do consumidor no servidor (f.dev console.log)
-    socket.addEventListener("message", (event) => {
-        // Pega data de msgs do back
-        const messageData = JSON.parse(event.data)['message'];
-        console.log(messageData);
-
-        var sender = messageData['sender'];
-        var message = messageData['message'];
-
-        // Input fica vazio após envio de msg
-        if (sender == '{{user}}'){
-            document.getElementById('msg').value = '';
-        }
-
-// Adiciona msg no chatbox
-var messageDiv = document.querySelector('.message');
-var newMessage = document.createElement('div');
-
-// Verifica o remetente e aplica a classe adequada
-if (sender != '{{user}}') {
-    newMessage.classList.add('receive');
-    newMessage.innerHTML = '<p style="color: #fff;">' + message + '<strong> - IA</strong></p>';
-} else {
-    newMessage.classList.add('send');
-    newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
+// Quando uma nova mensagem for enviada, essa função ativa
+function scrollToBottom() {
+    var chatContainer = document.getElementById("chatContainer");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-// Adiciona a nova mensagem ao contêiner
-messageDiv.appendChild(newMessage);
-scrollToBottom();
+// Verifica o protocolo e define Endpoint
+const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+// Cria a URL do Endpoint para relacionar com o routing.py 
+const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
+const socket = new WebSocket(wsEndpoint);
 
-    });
+// Evento conexão (f.dev)
+socket.onopen = (event) => {
+    console.log("Conexão com WebSocket aberta!");
+};
 
-    document.querySelector('.red-button').addEventListener('click', function() {
-        socket.send(JSON.stringify({ 'action': 'close' }));
-        socket.close();
-        window.location.href = '/';
-        console.log("Conexão com WebSocket fechada!")
-    })
+// Form botão 'submit'
+document.getElementById('message-form').addEventListener('submit', function(event){
+    // Previne a página de recarregar
+    event.preventDefault();
+    // Envia msg para consumers no back
+    const message = document.getElementById('msg').value;
+    socket.send(
+        JSON.stringify({
+            'message': message,
+            'room_name': '{{room_name}}',
+            'sender': '{{user}}',
+        })
+    );
+    
+    // Muda o texto do container de boas-vindas para "chat"
+    document.querySelector('.welcome-container h2').textContent = 'Chat';
+});
+
+// Res do consumidor no servidor (f.dev console.log)
+socket.addEventListener("message", (event) => {
+    // Pega data de msgs do back
+    const messageData = JSON.parse(event.data)['message'];
+    console.log(messageData);
+
+    var sender = messageData['sender'];
+    var message = messageData['message'];
+
+    // Input fica vazio após envio de msg
+    if (sender == '{{user}}'){
+        document.getElementById('msg').value = '';
+    }
+
+    // Adiciona msg no chatbox
+    var messageDiv = document.querySelector('.message');
+    var newMessage = document.createElement('div');
+
+    // Verifica o remetente e aplica a classe adequada
+    if (sender != '{{user}}') {
+        newMessage.classList.add('receive');
+        newMessage.innerHTML = '<p style="color: #fff;">' + message + '<strong> - IA</strong></p>';
+    } else {
+        newMessage.classList.add('send');
+        newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
+    }
+
+    // Adiciona a nova mensagem ao contêiner
+    messageDiv.appendChild(newMessage);
+    scrollToBottom();
+});
+
+document.querySelector('.red-button').addEventListener('click', function() {
+    socket.send(JSON.stringify({ 'action': 'close' }));
+    socket.close();
+    window.location.href = '/';
+    console.log("Conexão com WebSocket fechada!");
+});
+
 
 </script>
 
