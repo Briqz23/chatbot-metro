@@ -57,6 +57,10 @@
         background-color: #FF0000;
     }
 
+    .status-bola.cinza {
+        background-color: #A0A0A0;
+    }
+
     /* Ajusta o alinhamento do nome e operação */
     .linha-nome {
         flex-grow: 1; /* Faz o nome da linha crescer e ocupar o espaço */

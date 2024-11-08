@@ -69,8 +69,16 @@
                     let corClasse = `linha-${linha.linha_numero}`;
                     
                     // Define a cor da bola de status
-                    let statusClasse = linha.linha_situacao === "Operação Normal" ? "verde" : "vermelha";
+                    let statusClasse;
 
+                    if (linha.linha_situacao === "Operação Normal") {
+                        statusClasse = "verde";
+                    } else if (linha.linha_situacao === "Operação Encerrada") {
+                        statusClasse = "cinza";
+                    } else {
+                        statusClasse = "vermelha";
+                    }
+                    
                     html += `
                         <div>
                             <span class="linha-numero ${corClasse}">${linha.linha_numero}</span>
