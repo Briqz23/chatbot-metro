@@ -341,3 +341,12 @@ form button {
     padding: 15px;
     border-radius: 8px;
 }
+
+/* Linha branca abaixo do texto */
+.welcome-container h2 {
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ffffff; /* Linha branca abaixo do texto */
+    display: inline-block;
+    width: 100%; /* Faz a linha ocupar toda a largura do container */
+}
