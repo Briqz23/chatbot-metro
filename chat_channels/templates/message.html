@@ -113,22 +113,35 @@ socket.onopen = (event) => {
     console.log("Conexão com WebSocket aberta!");
 };
 
-// Form botão 'submit'
-document.getElementById('message-form').addEventListener('submit', function(event){
-    // Previni a página de recarregar
-    event.preventDefault();
-    // Envia msg para consumers no back
+// Função de envio de mensagem
+function sendMessage() {
     const message = document.getElementById('msg').value;
-    socket.send(
-        JSON.stringify({
-            'message': message,
-            'room_name': '{{room_name}}',
-            'sender': '{{user}}',
-        })
-    );
-    
-    // Muda o texto do container de boas-vindas para "chat"
-    document.querySelector('.welcome-container h2').textContent = 'Chat';
+    if (message.trim() !== "") {
+        socket.send(
+            JSON.stringify({
+                'message': message,
+                'room_name': '{{room_name}}',
+                'sender': '{{user}}',
+            })
+        );
+        
+        // Muda o texto do container de boas-vindas para "chat"
+        document.querySelector('.welcome-container h2').textContent = 'Chat';
+    }
+}
+
+// Evento para o botão 'submit'
+document.getElementById('message-form').addEventListener('submit', function(event){
+    event.preventDefault(); // Previne a página de recarregar
+    sendMessage();
+});
+
+// Envia a mensagem ao pressionar Enter
+document.getElementById('msg').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) { // Envia apenas com Enter, sem Shift
+        event.preventDefault(); // Previne quebra de linha
+        sendMessage();
+    }
 });
 
 // Res do consumidor no servidor (f.dev console.log)
@@ -171,6 +184,7 @@ document.querySelector('.red-button').addEventListener('click', function() {
     window.location.href = '/';
     console.log("Conexão com WebSocket fechada!");
 });
+
 
 </script>
 

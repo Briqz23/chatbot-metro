@@ -141,7 +141,7 @@ form {
 }
 
 form textarea {
-    width: 70%;
+    width: 80%;
     height: 40px;
     border-radius: 10px;
     padding: 10px;
@@ -149,7 +149,22 @@ form textarea {
     color: #ffffff; /* Cor do texto branco */
     border: none; /* Remove a borda */
     resize: none; /* Remove a opção de redimensionamento */
+    transition: background-color 0.2s, border 0.2s; /* Transição suave */
 }
+
+/* Ao focar na caixa de texto */
+form textarea:focus {
+    background-color: #909090; /* Fundo mais claro para destacar */
+    outline: none; /* Remove o outline padrão */
+    border: 1px solid #ffffff; /* Adiciona uma borda branca fina para destacar */
+}
+
+/* Ao passar o mouse sobre a caixa de texto */
+form textarea:hover {
+    background-color: #909090; /* Fundo levemente mais claro */
+    border: 1px solid #ffffff; /* Borda branca para realce */
+}
+
 
 form textarea::placeholder {
     color: #ffffff; /* Cor do texto de placeholder em branco */
@@ -166,7 +181,6 @@ form button {
 }
 
 /* Estilos para mensagens */
-/* Estilos para mensagens */
 .chat-body-parent {
     flex-grow: 1;
     display: flex;
@@ -176,19 +190,64 @@ form button {
     align-items: center;
 }
 
+/* Estilo do container do chat */
 .chat-body {
     width: 100%;
     background-color: #363636;
     padding: 10px;
     border-radius: 10px;
+    overflow-y: auto; /* Permite rolagem */
 }
 
+/* Estilo para a barra de rolagem no .chat-body */
+.chat-body::-webkit-scrollbar {
+    width: 6px; /* Largura da barra de rolagem */
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da barra de rolagem */
+    border-radius: 10px;    /* Arredondamento da barra */
+}
+
+.chat-body::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cor da barra ao passar o mouse */
+}
+
+/* Estilo para navegadores Firefox no .chat-body */
+.chat-body {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+/* Estilo das mensagens dentro do chat */
 .message {
     max-height: 400px;
-    overflow-y: auto;
+    overflow-y: auto; /* Permite rolagem no container de mensagens */
     display: flex;
     flex-direction: column;
 }
+
+/* Estilo para a barra de rolagem no .message */
+.message::-webkit-scrollbar {
+    width: 6px; /* Largura da barra de rolagem */
+}
+
+.message::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da barra de rolagem */
+    border-radius: 10px;    /* Arredondamento da barra */
+}
+
+.message::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cor da barra ao passar o mouse */
+}
+
+/* Estilo para navegadores Firefox no .message */
+.message {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+
 
 
 
@@ -278,7 +337,7 @@ form button {
 
 .welcome-container {
     /* Aqui vão os estilos personalizados para o container da mensagem de boas-vindas */
-    background-color: #505050;
+    background-color: #363636;
     padding: 15px;
     border-radius: 8px;
 }
