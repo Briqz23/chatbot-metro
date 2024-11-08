@@ -103,14 +103,19 @@ const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
 const socket = new WebSocket(wsEndpoint);
 
-// Evento conexão (f.dev)
+// Limpa as bolhas de chat ao carregar a página
+window.addEventListener('load', () => {
+    document.getElementById("chatContainer").innerHTML = '';
+});
+
+// Evento de conexão com WebSocket aberta
 socket.onopen = (event) => {
     console.log("Conexão com WebSocket aberta!");
 };
 
 // Form botão 'submit'
 document.getElementById('message-form').addEventListener('submit', function(event){
-    // Previne a página de recarregar
+    // Previni a página de recarregar
     event.preventDefault();
     // Envia msg para consumers no back
     const message = document.getElementById('msg').value;
@@ -158,13 +163,14 @@ socket.addEventListener("message", (event) => {
     scrollToBottom();
 });
 
+// Ao fechar o WebSocket, redefina o container de mensagens
 document.querySelector('.red-button').addEventListener('click', function() {
     socket.send(JSON.stringify({ 'action': 'close' }));
     socket.close();
+    document.getElementById("chatContainer").innerHTML = ''; // Limpa as bolhas de chat
     window.location.href = '/';
     console.log("Conexão com WebSocket fechada!");
 });
-
 
 </script>
 
