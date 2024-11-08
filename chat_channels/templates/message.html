@@ -16,7 +16,6 @@
     
     <div class="container-fluid">
         <div class="row">
-            <!-- Menu da esquerda -->
             <div class="col-md-3 left-section">
                 <div class="logo">
                     <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
@@ -133,15 +132,23 @@
             document.getElementById('msg').value = '';
         }
 
-        // Adiciona msg no chatbox
-        var messageDiv = document.querySelector('.message');
-        // # OBS: no futuro provavelmente n precisaremos disso (chat de user e IA, somente)
-        if (sender != '{{user}}') { // Assumindo que vc tem uma variável "usuário atual" para armazenar o nome dele
-            messageDiv.innerHTML += '<div class="receive"><p style="color: #000;">' + message + '<strong>-IA</strong></p></div>';
-        } else {
-            messageDiv.innerHTML += '<div class="send"><p style="color: #000;">' + message + '</p></div>';
-        }
-        scrollToBottom();
+// Adiciona msg no chatbox
+var messageDiv = document.querySelector('.message');
+var newMessage = document.createElement('div');
+
+// Verifica o remetente e aplica a classe adequada
+if (sender != '{{user}}') {
+    newMessage.classList.add('receive');
+    newMessage.innerHTML = '<p style="color: #fff;">' + message + '<strong> - IA</strong></p>';
+} else {
+    newMessage.classList.add('send');
+    newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
+}
+
+// Adiciona a nova mensagem ao contêiner
+messageDiv.appendChild(newMessage);
+scrollToBottom();
+
     });
 
     document.querySelector('.red-button').addEventListener('click', function() {

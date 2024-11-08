@@ -85,6 +85,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    
 }
 
 .right-section h1, .right-section h2, .right-section p {
@@ -135,6 +136,8 @@ form {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    border-top: 2px solid #ffffff; /* Linha branca de separação */
+    padding-top: 10px; /* Espaço entre a linha e a caixa de texto */
 }
 
 form textarea {
@@ -142,7 +145,16 @@ form textarea {
     height: 40px;
     border-radius: 10px;
     padding: 10px;
+    background-color: #808080; /* Cor de fundo cinza */
+    color: #ffffff; /* Cor do texto branco */
+    border: none; /* Remove a borda */
+    resize: none; /* Remove a opção de redimensionamento */
 }
+
+form textarea::placeholder {
+    color: #ffffff; /* Cor do texto de placeholder em branco */
+}
+
 
 form button {
     width: 25%;
@@ -153,6 +165,7 @@ form button {
     color: #000;
 }
 
+/* Estilos para mensagens */
 /* Estilos para mensagens */
 .chat-body-parent {
     flex-grow: 1;
@@ -165,7 +178,7 @@ form button {
 
 .chat-body {
     width: 100%;
-    background-color: #505050;
+    background-color: #363636;
     padding: 10px;
     border-radius: 10px;
 }
@@ -173,22 +186,38 @@ form button {
 .message {
     max-height: 400px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
-.receive, .send {
-    background-color: #B1A296;
+
+
+.receive {
+    align-self: flex-start; /* Alinhamento à esquerda para a IA */
+    background-color: #000000; /* Cor preta para as bolhas */
     max-width: 400px;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
-}
-
-.receive {
-    align-self: flex-start;
+    color: #fff; /* Cor do texto em branco */
 }
 
 .send {
-    align-self: flex-end;
+    align-self: flex-end; /* Alinhamento à direita para o usuário */
+    background-color: #202020; /* Cor cinza para as bolhas */
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #fff; /* Cor do texto em branco */
+}
+
+.send p {
+    color: #fff; /* Cor do texto em branco */
+}
+
+.receive p {
+    color: #fff; /* Cor do texto em branco */
 }
 
 .send-btn {
