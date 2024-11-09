@@ -58,11 +58,11 @@
                 {% for i in messages %}
                     {% if i.sender != user %}
                         <div class="receive">
-                            <p style="color: #000;">{{ i.message }}<strong>-IA</strong></p>
+                            <p style="color: #fff;">{{ i.message }}<strong>-IA</strong></p>
                         </div>
                     {% else %}
                         <div class="send">
-                            <p style="color: #000;">{{ i.message }}</p>
+                            <p style="color: #fff;">{{ i.message }}</p>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -102,11 +102,6 @@ const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 // Cria a URL do Endpoint para relacionar com o routing.py 
 const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
 const socket = new WebSocket(wsEndpoint);
-
-// Limpa as bolhas de chat ao carregar a página
-window.addEventListener('load', () => {
-    document.getElementById("chatContainer").innerHTML = '';
-});
 
 // Evento de conexão com WebSocket aberta
 socket.onopen = (event) => {
@@ -180,7 +175,6 @@ socket.addEventListener("message", (event) => {
 document.querySelector('.red-button').addEventListener('click', function() {
     socket.send(JSON.stringify({ 'action': 'close' }));
     socket.close();
-    document.getElementById("chatContainer").innerHTML = ''; // Limpa as bolhas de chat
     window.location.href = '/';
     console.log("Conexão com WebSocket fechada!");
 });
