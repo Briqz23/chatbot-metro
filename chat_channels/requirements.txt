@@ -22,7 +22,7 @@ idna==3.9
 incremental==24.7.2
 node==1.2.1
 nodejs==0.1.1
-numpy==2.0.0
+numpy==1.23.4
 oauthlib==3.2.2
 odict==1.9.0
 optional-django==0.1.0
@@ -56,3 +56,4 @@ zope.lifecycleevent==5.0
 zope.proxy==5.2
 openai
 python-dotenv
+faiss-cpu==1.8.0

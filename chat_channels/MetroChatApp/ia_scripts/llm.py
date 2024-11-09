@@ -1,9 +1,10 @@
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+import os
 from openai import OpenAI
 from langchain_community.vectorstores.faiss import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.utils.math import cosine_similarity
-from data.templates import (
+from .data.templates import (
     rotas_perguntas,
     horarios_perguntas,
     politicas_perguntas,
@@ -13,14 +14,16 @@ from data.templates import (
 )
 from langchain.schema import Document
 
-
 def gerando_data():
+    # Diretório do arquivo atual (llm.py)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Caminho para o arquivo scrapping_metro.txt
+    file_path = os.path.join(current_dir, 'data', 'scrapping_metro.txt')
+
     splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
 
-    with open(
-        "chat_channels/MetroChatApp/ia_scripts/data/scrapping_metro.txt",
-        encoding="utf-8",
-    ) as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         docs = f.read()
 
     document = Document(page_content=docs)
@@ -124,11 +127,10 @@ def obter_resposta_ia(message):
     return response
 
 
-def main():
+def main_ia(user_input):
     # Exemplo de uso da nova função
-    resposta = obter_resposta_ia("Qual a rota da linha 1?")
-    print(resposta)
-
+    resposta = obter_resposta_ia(user_input)	
+    return resposta
 
 if __name__ == "__main__":
-    main()
+    main_ia()

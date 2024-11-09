@@ -3,7 +3,6 @@ from .models import Room, Message
 from MetroChatApp.webscraping.api import obter_status_metro
 import secrets
 # Tratam as reqs HTTP e retornam respostas
-
 def CreateRoom(request):
     if request.method == 'POST':
         # Gera usuário e room 

@@ -1,5 +1,5 @@
 import json
-from MetroChatApp.ia_scripts.llm import simula_resposta_ia
+from MetroChatApp.ia_scripts.llm import main_ia
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from MetroChatApp.models import *
@@ -33,7 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         sender = text_data_json['sender']
         
         # Simulador de resposta de IA
-        resposta_ia = simula_resposta_ia(message_unica)
+        resposta_ia = main_ia(message_unica)
 
         # Enviar mensagem do usuário no front
         await self.send(text_data=json.dumps({
@@ -61,7 +61,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'room_name': room_name,
             'sender': 'IA'
         })
-    
+
     # "Falando" para o django que estamos praticando manipulação de dados 
     @database_sync_to_async
     def create_message(self, data):
@@ -72,7 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not Message.objects.filter(message=data['message']).exists():
             new_message = Message(room=get_room_by_name, sender=data['sender'], message=data['message'])
             new_message.save()
-
+        
     @database_sync_to_async
     def close_chat(self):
         try:
