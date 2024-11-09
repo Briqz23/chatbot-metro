@@ -79,27 +79,41 @@ def prompt_router(
     return f"{template}\n\nUsuário: {input['query']}" 
 
 
-def simula_resposta_ia(message):
+def simula_resposta_ia(message, chat_history):
     client = OpenAI()
     model = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=0.7)
 
+    formatted_history = [{"role": msg["role"], "content": msg["content"]} for msg in chat_history["chat_history"]]
+    
     completion = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": message},
+            {"role": "system", "content": "Você está falando com um assistente virtual."},
+            {"role": "user", 
+             "content": f"""
+                    CONSIDERANDO O SEGUINTE HISTÓRIO DE MENSAGENS:
+                    {formatted_history}
+                    RESPONDA A MENSAGEM DO USUÁRIO:
+                    {message}
+
+                """
+},  # Mensagem do usuário
         ],
     )
 
     res = completion.choices[0].message.content
     return res
 
+    # Formate o histórico para o modelo da IA
+    
+    # Obtenha a resposta da IA, considerando o contexto
+    #resposta = obter_resposta_ia({"query": chat_data["chat_history"][-1]["content"], "history": formatted_history})
 
 def get_input_query(message):
     return {"query": message}
 
 
-def obter_resposta_ia(message):
+def obter_resposta_ia(message, chat_history):
     # Gerar dados e embeddings
     splitted_data = gerando_data()
     (
@@ -122,15 +136,6 @@ def obter_resposta_ia(message):
     )
 
     # Simulação de resposta da IA
-    response = simula_resposta_ia(template)
+    response = simula_resposta_ia(template, chat_history)
 
     return response
-
-
-def main_ia(user_input):
-    # Exemplo de uso da nova função
-    resposta = obter_resposta_ia(user_input)	
-    return resposta
-
-if __name__ == "__main__":
-    main_ia()
