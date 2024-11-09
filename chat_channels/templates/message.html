@@ -35,7 +35,7 @@
                             <a href="{% url 'mapa' %}">Mapa</a>
                         </li>
                         <li>
-                            <button class="red-button">
+                            <button class="red-button" data-bs-toggle="modal" data-bs-target="#encerrarSessao">
                                 <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
                             </button>
                         </li>
@@ -44,49 +44,68 @@
             </div>
             
             <!-- Chat (na direita) -->
-<!-- Chat (na direita) -->
-<div class="col-md-9 right-section">
-    <!-- Container separado para a mensagem de boas-vindas -->
-    <div class="welcome-container">
-        <center><h2>Bem vindo ao PontoCerto, do que você precisa?</h2></center>
-    </div>
-    
-    <div class="chat-body-parent">
-        <div class="chat-body" id="tasks">
-            <div class="message" id="chatContainer">
-                <!-- Mensagens recebidas abaixo -->
-                {% for i in messages %}
-                    {% if i.sender != user %}
-                        <div class="receive">
-                            <p style="color: #fff;">{{ i.message }}<strong>-IA</strong></p>
+            <div class="col-md-9 right-section">
+                <!-- Container separado para a mensagem de boas-vindas -->
+                <div class="welcome-container">
+                    <center><h2>Bem vindo ao PontoCerto, do que você precisa?</h2></center>
+                </div>
+                
+                <div class="chat-body-parent">
+                    <div class="chat-body" id="tasks">
+                        <div class="message" id="chatContainer">
+                            <!-- Mensagens recebidas abaixo -->
+                            {% for i in messages %}
+                                {% if i.sender != user %}
+                                    <div class="receive">
+                                        <p style="color: #fff;">{{ i.message }}<strong>-IA</strong></p>
+                                    </div>
+                                {% else %}
+                                    <div class="send">
+                                        <p style="color: #fff;">{{ i.message }}</p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                    {% else %}
-                        <div class="send">
-                            <p style="color: #fff;">{{ i.message }}</p>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
 
-            <div class="form">
-                <form action="" id="message-form" method="POST">
-                    {% csrf_token %}
-                    <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
-                    
-                    <button class="send-btn" type="submit">
-                        <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
-                    </button>
-                    
-                    <button class="image-btn">
-                        <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
-                    </button>
-                </form>    
+                        <div class="form">
+                            <form action="" id="message-form" method="POST">
+                                {% csrf_token %}
+                                <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..." required></textarea>
+                                
+                                <button class="send-btn" type="submit">
+                                    <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
+                                </button>
+                                
+                                <button class="image-btn">
+                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
+                                </button>
+                            </form>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal ENCERRAR SESSÃO -->
+        <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-header d-flex justify-content-center">
+                        <h3 class="modal-title text-white">ENCERRAR SESSÃO</h3>
+                    </div>
+                    <br>
+                    <div class="modal-body text-white">
+                        Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)  
+                    </div>
+                    <br>
+                    <div class="modal-footer d-flex justify-content-around">
+                        <button type="button" class="btn btn-secondary stay-button" data-bs-dismiss="modal" aria-label="Close">Não</button>
+                        <button type="button" class="btn btn-primary exit-button">Sim</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
 
 </body>
 
@@ -171,17 +190,22 @@ socket.addEventListener("message", (event) => {
     scrollToBottom();
 });
 
-// Ao fechar o WebSocket, redefina o container de mensagens
-document.querySelector('.red-button').addEventListener('click', function() {
-    socket.send(JSON.stringify({ 'action': 'close' }));
-    socket.close();
-    window.location.href = '/';
-    console.log("Conexão com WebSocket fechada!");
+// event listener ao botão "Sim" quando o modal é exibido
+// Fecha o WebSocket, volta para o início
+$('#encerrarSessao').on('show.bs.modal', function () {
+    console.log("CARREGAMOS BABY!")
+    document.querySelector('.modal-footer .exit-button').addEventListener('click', function() {
+        socket.send(JSON.stringify({ 'action': 'close' }));
+        socket.close();
+        window.location.href = '/';
+        console.log("Conexão com WebSocket fechada!");
+    });
 });
 
 
 </script>
 
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'js/monitor.js' %}"></script>
 
 </html>

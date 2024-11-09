@@ -247,10 +247,6 @@ form button {
     scrollbar-color: #888 transparent;
 }
 
-
-
-
-
 .receive {
     align-self: flex-start; /* Alinhamento à esquerda para a IA */
     background-color: #000000; /* Cor preta para as bolhas */
@@ -349,4 +345,37 @@ form button {
     border-bottom: 2px solid #ffffff; /* Linha branca abaixo do texto */
     display: inline-block;
     width: 100%; /* Faz a linha ocupar toda a largura do container */
+}
+
+/* Modal para ENCERRAR SESSÃO e customização */
+
+.modal-content {
+    background-color: #3A3A3A;
+    border-radius: 30px;
+}
+
+.modal-header {
+    background-color: #D32F2F;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom: none;
+}
+
+.stay-button {
+    background-color: #5A5A5A;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 80px;
+    height: 40px;
+    font-size: 16px;
+}
+.exit-button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 80px;
+    height: 40px;
+    font-size: 16px;
 }
