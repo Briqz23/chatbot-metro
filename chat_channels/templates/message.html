@@ -110,6 +110,8 @@
 </body>
 
 <script>
+let socket;
+
 // Quando uma nova mensagem for enviada, essa função ativa
 function scrollToBottom() {
     var chatContainer = document.getElementById("chatContainer");
@@ -120,12 +122,15 @@ function scrollToBottom() {
 const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 // Cria a URL do Endpoint para relacionar com o routing.py 
 const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
-const socket = new WebSocket(wsEndpoint);
+socket = new WebSocket(wsEndpoint);
 
 // Evento de conexão com WebSocket aberta
 socket.onopen = (event) => {
     console.log("Conexão com WebSocket aberta!");
 };
+
+// Guarda o WebSocket na sessionStorage
+sessionStorage.setItem("wsEndpoint", wsEndpoint);
 
 // Função de envio de mensagem
 function sendMessage() {
@@ -193,7 +198,6 @@ socket.addEventListener("message", (event) => {
 // event listener ao botão "Sim" quando o modal é exibido
 // Fecha o WebSocket, volta para o início
 $('#encerrarSessao').on('show.bs.modal', function () {
-    console.log("CARREGAMOS BABY!")
     document.querySelector('.modal-footer .exit-button').addEventListener('click', function() {
         socket.send(JSON.stringify({ 'action': 'close' }));
         socket.close();

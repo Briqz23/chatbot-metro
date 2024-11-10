@@ -67,6 +67,21 @@
 </body>
 
 <script>
+    // SCRIPT para reabrir do WebSocket
+    let socket;
+
+    function iniciaWebSocket() {
+        const wsEndpoint = sessionStorage.getItem("wsEndpoint");
+        if (wsEndpoint) {
+            socket = new WebSocket(wsEndpoint);
+            console.log("WebSocket reaberto!");
+        } else {
+            console.error("WebSocket endpoint não encontrado.");
+        }
+    }
+
+    iniciaWebSocket();
+
     // Funções de Zoom 
     let scale = 1;
     const img = document.getElementById("zoomable-image");
