@@ -70,17 +70,20 @@
     // Funções de Zoom 
     let scale = 1;
     const img = document.getElementById("zoomable-image");
+
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
                 
     //ZOOM IN
     function zoomIn() {
-        scale += 0.8;  // Aumenta a escala em 0.1
+        scale += 0.6;  // Aumenta a escala em 0.1
         img.style.transform = `scale(${scale})`;
     }
                 
     //ZOOM OUT
     function zoomOut() {
         if (scale > 1) {  // Impede que o zoom out vá além do tamanho original
-        scale -= 0.8;  // Diminui a escala em 0.1
+        scale -= 0.;  // Diminui a escala em 0.1
         img.style.transform = `scale(${scale})`;
         }
     }
@@ -90,6 +93,40 @@
         scale = 1
         img.style.transform = `scale(${scale})`;
     }
+
+    function applyTransform() {
+        img.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    // Funções para permitir arrastar a imagem
+    img.addEventListener('mousedown', (e) => {
+        if (scale > 1) {  // Permite arrastar apenas se houver zoom
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            img.style.cursor = 'grabbing';
+        }
+    });
+
+    img.addEventListener('mouseup', () => {
+        isDragging = false;
+        img.style.cursor = 'grab';
+    });
+
+    img.addEventListener('mouseleave', () => {
+        isDragging = false;
+        img.style.cursor = 'default';
+    });
+
+    img.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyTransform();
+        }
+    });
+
 </script>
 
 <script src="{% static 'js/monitor.js' %}"></script>
