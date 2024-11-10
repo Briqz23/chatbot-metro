@@ -59,6 +59,21 @@
 
 <div id="linha-status"></div>
 <script>
+    // SCRIPT para reabrir do WebSocket
+    let socket;
+
+    function iniciaWebSocket() {
+        const wsEndpoint = sessionStorage.getItem("wsEndpoint");
+        if (wsEndpoint) {
+            socket = new WebSocket(wsEndpoint);
+            console.log("WebSocket reaberto!");
+        } else {
+            console.error("WebSocket endpoint não encontrado.");
+        }
+    }
+
+    iniciaWebSocket();
+
     function atualizarLinhas() {
         fetch("{% url 'status_metro_api' %}")  // Rota Endpoint API
             .then(response => response.json())
