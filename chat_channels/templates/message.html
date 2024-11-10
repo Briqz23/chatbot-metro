@@ -107,6 +107,8 @@
         </div>
     </div>
 
+
+
 </body>
 
 <script>
@@ -205,6 +207,47 @@ $('#encerrarSessao').on('show.bs.modal', function () {
         console.log("Conexão com WebSocket fechada!");
     });
 });
+
+// Código para a funcionalidade de reconhecimento de voz
+// Seleciona os elementos necessários
+const microphoneButton = document.querySelector('.image-btn');
+const messageTextarea = document.getElementById('msg');
+
+// Verifica se o navegador suporta a API de reconhecimento de fala
+if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+
+    // Configurações de reconhecimento de voz
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    // Inicia o reconhecimento ao clicar no botão de microfone
+    microphoneButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        recognition.start();
+        messageTextarea.placeholder = "Ouvindo..."; // Altera o placeholder para "Ouvindo"
+    });
+
+    // Quando o reconhecimento é concluído com sucesso
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        messageTextarea.value = transcript; // Insere o texto na caixa de texto
+    };
+
+    // Quando o reconhecimento de voz termina
+    recognition.onend = () => {
+        messageTextarea.placeholder = "Digite..."; // Restaura o placeholder original
+    };
+
+    // Lida com erros de reconhecimento
+    recognition.onerror = (event) => {
+        console.error("Erro no reconhecimento de voz:", event.error);
+        messageTextarea.placeholder = "Digite..."; // Restaura o placeholder em caso de erro
+    };
+} else {
+    alert("Reconhecimento de voz não é suportado neste navegador.");
+}
 
 
 </script>
