@@ -1,3 +1,4 @@
+import numpy as np
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 import os
 from openai import OpenAI
@@ -33,16 +34,46 @@ def gerando_data():
 
     return splitted_data
 
+import numpy as np
+import faiss
+import os
 
 def gerando_embedding(splitted_data):
     embedding = OpenAIEmbeddings()
-    vectorStore = FAISS.from_documents(splitted_data, embedding)
-    retriever = vectorStore.as_retriever(search_kwargs={"k": 5})  # Aumentado para 5
 
-    # Gerando embeddings para perguntas específicas
-    rotas_perguntas_embeddings = embedding.embed_documents(rotas_perguntas)
-    horarios_perguntas_embeddings = embedding.embed_documents(horarios_perguntas)
-    politicas_perguntas_embeddings = embedding.embed_documents(politicas_perguntas)
+    # Caminho relativo para salvar o índice FAISS e os embeddings das perguntas
+    base_path = os.path.join(os.path.dirname(__file__), "data")
+    faiss_index_path = os.path.join(base_path, "faiss_index")
+    rotas_embeddings_path = os.path.join(base_path, "rotas_embeddings.npy")
+    horarios_embeddings_path = os.path.join(base_path, "horarios_embeddings.npy")
+    politicas_embeddings_path = os.path.join(base_path, "politicas_embeddings.npy")
+
+    # Certifique-se de que o diretório "data" existe antes de salvar
+    os.makedirs(base_path, exist_ok=True)
+
+    # Verificar e carregar o índice FAISS ou criar um novo
+    if os.path.exists(faiss_index_path) and os.path.isfile(f"{faiss_index_path}.index"):
+        vectorStore = FAISS.load_local(faiss_index_path, embedding)
+    else:
+        vectorStore = FAISS.from_documents(splitted_data, embedding)
+        vectorStore.save_local(faiss_index_path)
+
+    # Carregar ou gerar embeddings específicos para as perguntas
+    if all(os.path.exists(path) for path in [rotas_embeddings_path, horarios_embeddings_path, politicas_embeddings_path]):
+        rotas_perguntas_embeddings = np.load(rotas_embeddings_path)
+        horarios_perguntas_embeddings = np.load(horarios_embeddings_path)
+        politicas_perguntas_embeddings = np.load(politicas_embeddings_path)
+    else:
+        rotas_perguntas_embeddings = embedding.embed_documents(rotas_perguntas)
+        horarios_perguntas_embeddings = embedding.embed_documents(horarios_perguntas)
+        politicas_perguntas_embeddings = embedding.embed_documents(politicas_perguntas)
+        
+        # Salvar embeddings em arquivos
+        np.save(rotas_embeddings_path, rotas_perguntas_embeddings)
+        np.save(horarios_embeddings_path, horarios_perguntas_embeddings)
+        np.save(politicas_embeddings_path, politicas_perguntas_embeddings)
+
+    retriever = vectorStore.as_retriever(search_kwargs={"k": 5})
 
     return (
         retriever,
@@ -50,7 +81,6 @@ def gerando_embedding(splitted_data):
         horarios_perguntas_embeddings,
         politicas_perguntas_embeddings,
     )
-
 
 def prompt_router(
     embeddings,
