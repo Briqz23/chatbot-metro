@@ -76,15 +76,15 @@
                                     <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
                                 </button>
                                 
-                                <button class="image-btn">
-                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
+                                <button class="image-btn" id="microphone-button">
+                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image" id="microphone-icon">
                                 </button>
                             </form>    
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
 
         <!-- Modal ENCERRAR SESSÃO -->
         <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao" aria-hidden="true">
@@ -210,8 +210,12 @@ $('#encerrarSessao').on('show.bs.modal', function () {
 
 // Código para a funcionalidade de reconhecimento de voz
 // Seleciona os elementos necessários
-const microphoneButton = document.querySelector('.image-btn');
+const microphoneButton = document.getElementById('microphone-button');
+const microphoneIcon = document.getElementById('microphone-icon');
 const messageTextarea = document.getElementById('msg');
+
+// Variável de controle para o estado de gravação
+let isRecording = false;
 
 // Verifica se o navegador suporta a API de reconhecimento de fala
 if ('webkitSpeechRecognition' in window) {
@@ -222,11 +226,23 @@ if ('webkitSpeechRecognition' in window) {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    // Inicia o reconhecimento ao clicar no botão de microfone
+    // Inicia ou para o reconhecimento ao clicar no botão de microfone
     microphoneButton.addEventListener('click', (event) => {
         event.preventDefault();
-        recognition.start();
-        messageTextarea.placeholder = "Ouvindo..."; // Altera o placeholder para "Ouvindo"
+
+        if (!isRecording) {
+            // Inicia o reconhecimento de voz
+            recognition.start();
+            messageTextarea.placeholder = "Ouvindo..."; // Altera o placeholder para "Ouvindo"
+            microphoneIcon.src = "{% static 'images/microfone_ativo.png' %}"; // Altera o ícone do microfone
+            isRecording = true; // Atualiza o estado para 'gravando'
+        } else {
+            // Para o reconhecimento de voz
+            recognition.stop();
+            messageTextarea.placeholder = "Digite..."; // Restaura o placeholder original
+            microphoneIcon.src = "{% static 'images/microfone.png' %}"; // Restaura o ícone original
+            isRecording = false; // Atualiza o estado para 'não gravando'
+        }
     });
 
     // Quando o reconhecimento é concluído com sucesso
@@ -237,13 +253,20 @@ if ('webkitSpeechRecognition' in window) {
 
     // Quando o reconhecimento de voz termina
     recognition.onend = () => {
-        messageTextarea.placeholder = "Digite..."; // Restaura o placeholder original
+        if (isRecording) {
+            // Se terminou naturalmente enquanto estava gravando, reseta o ícone e o placeholder
+            messageTextarea.placeholder = "Digite...";
+            microphoneIcon.src = "{% static 'images/microfone.png' %}";
+            isRecording = false; // Atualiza o estado para 'não gravando'
+        }
     };
 
     // Lida com erros de reconhecimento
     recognition.onerror = (event) => {
         console.error("Erro no reconhecimento de voz:", event.error);
         messageTextarea.placeholder = "Digite..."; // Restaura o placeholder em caso de erro
+        microphoneIcon.src = "{% static 'images/microfone.png' %}"; // Restaura o ícone original em caso de erro
+        isRecording = false; // Atualiza o estado para 'não gravando'
     };
 } else {
     alert("Reconhecimento de voz não é suportado neste navegador.");
