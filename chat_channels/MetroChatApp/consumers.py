@@ -39,13 +39,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Nova mensagem do usuário no histórico
         self.chat_data["chat_history"].append({"role": "user", "content": message_unica})  
-        print(f"ANTES DE EXECUTAR A FUNÇÃO DA RESPOSTA IA: \n{self.chat_data}")
+        # print(f"ANTES DE EXECUTAR A FUNÇÃO DA RESPOSTA IA: \n{self.chat_data}")
         # Simulador de resposta de IA
         resposta_ia = obter_resposta_ia(message_unica, self.chat_data)
 
         # Nova mensagem da IA no histórico
         self.chat_data["chat_history"].append({"role": "AI", "content": resposta_ia})
-        print(f"DEPOIS DE EXECUTAR A FUNÇÃO DA RESPOSTA IA: \n{self.chat_data}")
+        # print(f"DEPOIS DE EXECUTAR A FUNÇÃO DA RESPOSTA IA: \n{self.chat_data}")
 
         # Enviar mensagem do usuário no front
         await self.send(text_data=json.dumps({
