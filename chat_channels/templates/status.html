@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/status.css' %}">
+    <link rel="icon" href="{% static 'images/trem.png'%}" type="image/png">
+
     <title>Status das linhas</title>
 </head>
 
@@ -43,20 +46,73 @@
                     </ul>
                 </nav>
             </div>
-
             <!-- Menu direita -->
             <div class="right-section">
-                {% for linha in linhas %}
-                <div>
-                    <h1>{{ linha.linha_numero }} Linha {{ linha.linha_nome }}</h1>
-                    <p>Status: {{ linha.linha_situacao }}</p>
+                <div id="linha-status">
+                    <div class="pt-4 d-flex">
+                        <h2 class="text-primary status pe-4">Carregando Status das Linhas...</h2>
+                        <div class="spinner-border spinner-border-lg text-primary" role="status" aria-hidden="true">
+                    </div>
                 </div>
-                {% endfor %}
-                <p>Atualizado: {{ hora_agora }}</p>
             </div>
         </div>
     </div>
 </body>
+
+<div id="linha-status"></div>
+<script>
+    // SCRIPT para reabrir do WebSocket
+    let socket;
+
+    function iniciaWebSocket() {
+        const wsEndpoint = sessionStorage.getItem("wsEndpoint");
+        if (wsEndpoint) {
+            socket = new WebSocket(wsEndpoint);
+            console.log("WebSocket reaberto!");
+        } else {
+            console.error("WebSocket endpoint não encontrado.");
+        }
+    }
+
+    iniciaWebSocket();
+
+    function atualizarLinhas() {
+        fetch("{% url 'status_metro_api' %}")  // Rota Endpoint API
+            .then(response => response.json())
+            .then(data => {
+                let html = "";
+                data.linhas.forEach(linha => {
+                    // Define a classe de cor com base no número da linha
+                    let corClasse = `linha-${linha.linha_numero}`;
+                    
+                    // Define a cor da bola de status
+                    let statusClasse;
+
+                    if (linha.linha_situacao === "Operação Normal") {
+                        statusClasse = "verde";
+                    } else if (linha.linha_situacao === "Operação Encerrada") {
+                        statusClasse = "cinza";
+                    } else {
+                        statusClasse = "vermelha";
+                    }
+                    
+                    html += `
+                        <div>
+                            <span class="linha-numero ${corClasse}">${linha.linha_numero}</span>
+                            <span class="linha-nome">${linha.linha_nome}</span>
+                            <span class="linha-status">${linha.linha_situacao}</span>
+                            <span class="status-bola ${statusClasse}"></span>
+                        </div>
+                    `;
+                });
+                html += `<p>Atualizado: ${data.hora_agora}</p>`;
+                document.getElementById("linha-status").innerHTML = html;
+            })
+            .catch(error => console.error("Erro ao carregar dados:", error));
+    }
+    // Chama ao carregar a página
+    document.addEventListener("DOMContentLoaded", atualizarLinhas);
+</script>
 
 <script src="{% static 'js/monitor.js' %}"></script>
 

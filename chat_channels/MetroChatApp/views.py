@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from .models import Room, Message
 from MetroChatApp.webscraping.api import obter_status_metro
 import secrets
+from django.http import JsonResponse
+from django.views.decorators.cache import cache_page
 # Tratam as reqs HTTP e retornam respostas
 def CreateRoom(request):
     if request.method == 'POST':
@@ -45,12 +47,14 @@ def MapaView(request):
 def StatusView(request):
     room_name = request.session.get('room_name')
     username = request.session.get('username')
-    linhas, hora_agora = obter_status_metro()
 
     context = {
         "room_name": room_name,
         "username": username,
-        "linhas": linhas,
-        "hora_agora": hora_agora,
     }
     return render(request, 'status.html', context)
+
+@cache_page(150)
+def status_metro_api(request):
+    linhas, hora_agora = obter_status_metro()
+    return JsonResponse({"linhas": linhas, "hora_agora": hora_agora})

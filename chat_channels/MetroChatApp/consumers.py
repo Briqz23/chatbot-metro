@@ -21,7 +21,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
     # Desconecta "cliente"
     async def disconnect(self, close_code):
-        # Lógica por tempo (2 horas) inserir aqui possivelmente
         await self.channel_layer.group_discard(self.room_name, self.channel_name)
         if self.disconnected_by_user:
             await self.close_chat()

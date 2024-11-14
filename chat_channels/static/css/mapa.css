@@ -1,0 +1,39 @@
+.image-container {
+    width: 1000px;
+    height: 800px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-container img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
+}
+
+.buttons {
+    position: fixed;  /* Fixa os botões em uma posição específica na tela */
+    right: 0;         /* Alinha os botões à direita */
+    top: 13%;         /* Centraliza os botões verticalmente na tela */
+    transform: translateY(-50%); /* Ajusta para que a posição centralizada fique exata */
+    display: flex;
+    flex-direction: column; /* Empilha os botões verticalmente */
+    gap: 10px;  /* Espaçamento entre os botões */
+    z-index: 1000;  /* Garante que os botões fiquem acima de outros elementos */
+    margin-right: 40px;
+}
+
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+    .image-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+}

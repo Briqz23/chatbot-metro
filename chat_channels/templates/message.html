@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="icon" href="{% static 'images/trem.png'%}" type="image/png">
+
     <title>Mensagens</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
@@ -16,7 +18,6 @@
     
     <div class="container-fluid">
         <div class="row">
-            <!-- Menu da esquerda -->
             <div class="col-md-3 left-section">
                 <div class="logo">
                     <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
@@ -36,7 +37,7 @@
                             <a href="{% url 'mapa' %}">Mapa</a>
                         </li>
                         <li>
-                            <button class="red-button">
+                            <button class="red-button" data-bs-toggle="modal" data-bs-target="#encerrarSessao">
                                 <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
                             </button>
                         </li>
@@ -46,7 +47,11 @@
             
             <!-- Chat (na direita) -->
             <div class="col-md-9 right-section">
-                <center><h2>Chat - Bem vindo ao PontoCerto, do que você precisa?</h2></center><hr>
+                <!-- Container separado para a mensagem de boas-vindas -->
+                <div class="welcome-container">
+                    <center><h2>Bem vindo ao PontoCerto, do que você precisa?</h2></center>
+                </div>
+                
                 <div class="chat-body-parent">
                     <div class="chat-body" id="tasks">
                         <div class="message" id="chatContainer">
@@ -54,11 +59,11 @@
                             {% for i in messages %}
                                 {% if i.sender != user %}
                                     <div class="receive">
-                                        <p style="color: #000;"> {{ i.message }}<strong>-IA</strong></p>
+                                        <p style="color: #fff;">{{ i.message }}<strong>-IA</strong></p>
                                     </div>
                                 {% else %}
                                     <div class="send">
-                                        <p style="color: #000;">{{ i.message }}</p>
+                                        <p style="color: #fff;">{{ i.message }}</p>
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -73,43 +78,68 @@
                                     <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
                                 </button>
                                 
-                                <button class="image-btn">
-                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image">
+                                <button class="image-btn" id="microphone-button">
+                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image" id="microphone-icon">
                                 </button>
                             </form>    
                         </div>
                     </div>
                 </div>
             </div>
+
+
+        <!-- Modal ENCERRAR SESSÃO -->
+        <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-header d-flex justify-content-center">
+                        <h3 class="modal-title text-white">ENCERRAR SESSÃO</h3>
+                    </div>
+                    <br>
+                    <div class="modal-body text-white">
+                        Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)  
+                    </div>
+                    <br>
+                    <div class="modal-footer d-flex justify-content-around">
+                        <button type="button" class="btn btn-secondary stay-button" data-bs-dismiss="modal" aria-label="Close">Não</button>
+                        <button type="button" class="btn btn-primary exit-button">Sim</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
 
 </body>
 
 <script>
-    // Quando uma nova mensagem for enviada, essa função ativa
-    function scrollToBottom() {
-        var chatContainer = document.getElementById("chatContainer");
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
+let socket;
 
-    // Verifica o protocolo e define Endpoint
-    const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-    // Cria a URL do Endpoint para relacionar com o routing.py 
-    const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
-    const socket = new WebSocket(wsEndpoint);
+// Quando uma nova mensagem for enviada, essa função ativa
+function scrollToBottom() {
+    var chatContainer = document.getElementById("chatContainer");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 
-    // Evento conexão (f.dev)
-    socket.onopen = (event) => {
-        console.log("Conexão com WebSocket aberta!");
-    };
+// Verifica o protocolo e define Endpoint
+const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+// Cria a URL do Endpoint para relacionar com o routing.py 
+const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
+socket = new WebSocket(wsEndpoint);
 
-    // Form botão 'submit'
-    document.getElementById('message-form').addEventListener('submit', function(event){
-        // Previni a página de recarregar
-        event.preventDefault();
-        // Envia msg para consumers no back
-        const message = document.getElementById('msg').value;
+// Evento de conexão com WebSocket aberta
+socket.onopen = (event) => {
+    console.log("Conexão com WebSocket aberta!");
+};
+
+// Guarda o WebSocket na sessionStorage
+sessionStorage.setItem("wsEndpoint", wsEndpoint);
+
+// Função de envio de mensagem
+function sendMessage() {
+    const message = document.getElementById('msg').value;
+    if (message.trim() !== "") {
         socket.send(
             JSON.stringify({
                 'message': message,
@@ -117,42 +147,137 @@
                 'sender': '{{user}}',
             })
         );
-    });
+        
+        // Muda o texto do container de boas-vindas para "chat"
+        document.querySelector('.welcome-container h2').textContent = 'Chat';
+    }
+}
 
-    // Res do consumidor no servidor (f.dev console.log)
-    socket.addEventListener("message", (event) => {
-        // Pega data de msgs do back
-        const messageData = JSON.parse(event.data)['message'];
-        console.log(messageData);
+// Evento para o botão 'submit'
+document.getElementById('message-form').addEventListener('submit', function(event){
+    event.preventDefault(); // Previne a página de recarregar
+    sendMessage();
+});
 
-        var sender = messageData['sender'];
-        var message = messageData['message'];
+// Envia a mensagem ao pressionar Enter
+document.getElementById('msg').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) { // Envia apenas com Enter, sem Shift
+        event.preventDefault(); // Previne quebra de linha
+        sendMessage();
+    }
+});
 
-        // Input fica vazio após envio de msg
-        if (sender == '{{user}}'){
-            document.getElementById('msg').value = '';
-        }
+// Res do consumidor no servidor (f.dev console.log)
+socket.addEventListener("message", (event) => {
+    // Pega data de msgs do back
+    const messageData = JSON.parse(event.data)['message'];
+    console.log(messageData);
 
-        // Adiciona msg no chatbox
-        var messageDiv = document.querySelector('.message');
-        // # OBS: no futuro provavelmente n precisaremos disso (chat de user e IA, somente)
-        if (sender != '{{user}}') { // Assumindo que vc tem uma variável "usuário atual" para armazenar o nome dele
-            messageDiv.innerHTML += '<div class="receive"><p style="color: #000;">' + message + '<strong>-IA</strong></p></div>';
-        } else {
-            messageDiv.innerHTML += '<div class="send"><p style="color: #000;">' + message + '</p></div>';
-        }
-        scrollToBottom();
-    });
+    var sender = messageData['sender'];
+    var message = messageData['message'];
 
-    document.querySelector('.red-button').addEventListener('click', function() {
+    // Input fica vazio após envio de msg
+    if (sender == '{{user}}'){
+        document.getElementById('msg').value = '';
+    }
+
+    // Adiciona msg no chatbox
+    var messageDiv = document.querySelector('.message');
+    var newMessage = document.createElement('div');
+
+    // Verifica o remetente e aplica a classe adequada
+    if (sender != '{{user}}') {
+        newMessage.classList.add('receive');
+        newMessage.innerHTML = '<p style="color: #fff;">' + message + '<strong> - IA</strong></p>';
+    } else {
+        newMessage.classList.add('send');
+        newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
+    }
+
+    // Adiciona a nova mensagem ao contêiner
+    messageDiv.appendChild(newMessage);
+    scrollToBottom();
+});
+
+// event listener ao botão "Sim" quando o modal é exibido
+// Fecha o WebSocket, volta para o início
+$('#encerrarSessao').on('show.bs.modal', function () {
+    document.querySelector('.modal-footer .exit-button').addEventListener('click', function() {
         socket.send(JSON.stringify({ 'action': 'close' }));
         socket.close();
         window.location.href = '/';
-        console.log("Conexão com WebSocket fechada!")
-    })
+        console.log("Conexão com WebSocket fechada!");
+    });
+});
+
+// Código para a funcionalidade de reconhecimento de voz
+// Seleciona os elementos necessários
+const microphoneButton = document.getElementById('microphone-button');
+const microphoneIcon = document.getElementById('microphone-icon');
+const messageTextarea = document.getElementById('msg');
+
+// Variável de controle para o estado de gravação
+let isRecording = false;
+
+// Verifica se o navegador suporta a API de reconhecimento de fala
+if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+
+    // Configurações de reconhecimento de voz
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    // Inicia ou para o reconhecimento ao clicar no botão de microfone
+    microphoneButton.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        if (!isRecording) {
+            // Inicia o reconhecimento de voz
+            recognition.start();
+            messageTextarea.placeholder = "Ouvindo..."; // Altera o placeholder para "Ouvindo"
+            microphoneIcon.src = "{% static 'images/microfone_ativo.png' %}"; // Altera o ícone do microfone
+            isRecording = true; // Atualiza o estado para 'gravando'
+        } else {
+            // Para o reconhecimento de voz
+            recognition.stop();
+            messageTextarea.placeholder = "Digite..."; // Restaura o placeholder original
+            microphoneIcon.src = "{% static 'images/microfone.png' %}"; // Restaura o ícone original
+            isRecording = false; // Atualiza o estado para 'não gravando'
+        }
+    });
+
+    // Quando o reconhecimento é concluído com sucesso
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        messageTextarea.value = transcript; // Insere o texto na caixa de texto
+    };
+
+    // Quando o reconhecimento de voz termina
+    recognition.onend = () => {
+        if (isRecording) {
+            // Se terminou naturalmente enquanto estava gravando, reseta o ícone e o placeholder
+            messageTextarea.placeholder = "Digite...";
+            microphoneIcon.src = "{% static 'images/microfone.png' %}";
+            isRecording = false; // Atualiza o estado para 'não gravando'
+        }
+    };
+
+    // Lida com erros de reconhecimento
+    recognition.onerror = (event) => {
+        console.error("Erro no reconhecimento de voz:", event.error);
+        messageTextarea.placeholder = "Digite..."; // Restaura o placeholder em caso de erro
+        microphoneIcon.src = "{% static 'images/microfone.png' %}"; // Restaura o ícone original em caso de erro
+        isRecording = false; // Atualiza o estado para 'não gravando'
+    };
+} else {
+    alert("Reconhecimento de voz não é suportado neste navegador.");
+}
+
 
 </script>
 
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'js/monitor.js' %}"></script>
 
 </html>
