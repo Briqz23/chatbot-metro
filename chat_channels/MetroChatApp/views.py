@@ -5,7 +5,6 @@ import secrets
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 # Tratam as reqs HTTP e retornam respostas
-
 def CreateRoom(request):
     if request.method == 'POST':
         # Gera usuário e room 
