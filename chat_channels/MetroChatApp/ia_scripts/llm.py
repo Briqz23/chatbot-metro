@@ -150,6 +150,7 @@ def simula_resposta_ia(message, chat_history):
                 """,
             },
         ],
+        max_tokens=50
     )
 
     res = completion.choices[0].message.content
