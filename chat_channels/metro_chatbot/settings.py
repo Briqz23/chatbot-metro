@@ -27,8 +27,11 @@ SECRET_KEY = 'django-insecure-z1m2$srav9mipfxil2huvyw+rjef7pkcc9$gx6tzo22$h^q8$t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'chatbot-metro-web-latest.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 # Application definition
 
