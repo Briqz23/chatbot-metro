@@ -5,6 +5,7 @@ from openai import OpenAI
 from langchain_community.vectorstores.faiss import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.utils.math import cosine_similarity
+import openai
 from .data.templates import (
     rotas_perguntas,
     horarios_perguntas,
@@ -14,7 +15,6 @@ from .data.templates import (
     system_politicas_template,
 )
 from langchain.schema import Document
-
 client = OpenAI()
 model = ChatOpenAI(model="o1-mini-2024-09-12", temperature=0.7)
 
