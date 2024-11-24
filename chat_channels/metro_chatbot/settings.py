@@ -40,7 +40,7 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://chatbot-metro.onrender.com/',
+    'https://ponto-certo-metro.onrender.com',
 ]
 
 INSTALLED_APPS = [
