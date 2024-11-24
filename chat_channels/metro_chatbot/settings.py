@@ -28,12 +28,17 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
 
 ALLOWED_HOSTS = [
     'chatbot-metro-web-latest.onrender.com',
     'chatbot-metro-web.onrender.com',
     'chatbot-metro.onrender.com',
+    'ponto-certo-metro.onrender.com',
+    'ponto-certo-metro-projeto.com',
     'localhost',
     '127.0.0.1',
 ]
