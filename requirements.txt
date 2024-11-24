@@ -1,8 +1,15 @@
+<<<<<<< HEAD:requirements.txt
+=======
 beautifulsoup4==4.12.3
 channels==4.1.0
 daphne==4.1.2
 Django==4.2.7
+>>>>>>> 662a4320d2e97fc6d119bf96b674a3b05459f6a0:chat_channels/requirements.txt
 django_channels==0.7.0
+beautifulsoup4==4.12.3
+channels==4.1.0
+daphne==4.1.2
+Django==4.2.7
 faiss_cpu==1.8.0
 langchain==0.3.7
 langchain_community==0.3.7

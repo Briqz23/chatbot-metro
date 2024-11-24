@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.venv/
+venv/
+README.md
+LICENSE__pycache__/
+*.pyc
+*.pyo
+.git/
+.venv/
+venv/
+README.md
+LICENSE

@@ -1,11 +1,21 @@
-# Use the Redis Stack server base image
-FROM redis/redis-stack-server:latest
+FROM python:3.11-slim
 
-# Expose port 6379 to the host machine
-EXPOSE 6379
+WORKDIR /app
 
-# Run the Redis Stack server
-CMD ["redis-stack-server"]
+COPY requirements.txt .
 
-#docker build -t my-redis-stack-server .
-#docker run -d --name redis-stack-server -p 6379:6379 my-redis-stack-server
+RUN pip install --upgrade pip
+
+RUN pip uninstall -y channels daphne
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN pip install -U 'channels[daphne]'
+
+COPY . .
+
+WORKDIR /app/chat_channels
+
+EXPOSE 8080
+
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"]
