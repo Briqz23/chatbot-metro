@@ -128,11 +128,8 @@ def prompt_router(
 
 
 def simula_resposta_ia(message, chat_history):
-<<<<<<< HEAD
-=======
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     model = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=0.7)
->>>>>>> 662a4320d2e97fc6d119bf96b674a3b05459f6a0
 
     formatted_history = [
         {"role": msg["role"], "content": msg["content"]}
