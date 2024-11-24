@@ -2,6 +2,7 @@ import numpy as np
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
 from langchain_community.vectorstores.faiss import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.utils.math import cosine_similarity
@@ -18,6 +19,8 @@ from langchain.schema import Document
 client = OpenAI()
 model = ChatOpenAI(model="o1-mini-2024-09-12", temperature=0.7)
 
+
+load_dotenv()
 
 def gerando_data():
     # Diretório do arquivo atual (llm.py)
@@ -125,6 +128,11 @@ def prompt_router(
 
 
 def simula_resposta_ia(message, chat_history):
+<<<<<<< HEAD
+=======
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    model = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=0.7)
+>>>>>>> 662a4320d2e97fc6d119bf96b674a3b05459f6a0
 
     formatted_history = [
         {"role": msg["role"], "content": msg["content"]}

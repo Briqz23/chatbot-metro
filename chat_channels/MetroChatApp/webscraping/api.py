@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 def obter_informacoes_metro():
     html_faq = requests.get("https://www.metro.sp.gov.br/fale-conosco/faq/").content
@@ -42,7 +43,8 @@ def obter_status_metro():
         response = session.get("https://www.metro.sp.gov.br/wp-content/themes/metrosp/direto-metro.php?embed=1")
 
     soup_linhas = BeautifulSoup(response.content, 'html.parser')
-    hora_request = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    fuso_sp = ZoneInfo('America/Sao_Paulo')
+    hora_request = datetime.now(fuso_sp).strftime("%d/%m/%Y %H:%M:%S")
 
     linhas = []
     for linha_info in soup_linhas.select('.linha'):
