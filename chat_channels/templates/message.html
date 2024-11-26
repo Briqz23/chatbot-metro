@@ -59,7 +59,7 @@
                             {% for i in messages %}
                                 {% if i.sender != user %}
                                     <div class="receive">
-                                        <p style="color: #fff;">{{ i.message }}<strong>-IA</strong></p>
+                                        <p style="color: #fff;">{{ i.message }}</p>
                                     </div>
                                 {% else %}
                                     <div class="send">
@@ -188,7 +188,7 @@ socket.addEventListener("message", (event) => {
     // Verifica o remetente e aplica a classe adequada
     if (sender != '{{user}}') {
         newMessage.classList.add('receive');
-        newMessage.innerHTML = '<p style="color: #fff;">' + message + '<strong> - IA</strong></p>';
+        newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
     } else {
         newMessage.classList.add('send');
         newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
