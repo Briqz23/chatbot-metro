@@ -17,7 +17,7 @@
             <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" style="width: 450px; height: auto; background-color: transparent; margin-bottom: -20px;">
             <form id="roomForm" action="{% url 'create-room' %}" method="POST">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-link">Toque para iniciar a sessão</button><br>
+                <p style="color: white;">Toque em qualquer lugar para iniciar a sessão</p><br>
             </form>
             
             <div class="mt-3">
@@ -74,12 +74,20 @@
     <!-- Carregar o JavaScript do Bootstrap -->
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-    <!-- DESATIVADO, INTERFERE COM BOTÃO DO MODAL LINGUAGEM
+    <!-- DESATIVADO, INTERFERE COM BOTÃO DO MODAL LINGUAGEM-->
     <script>
-        // Script para avançar para a próxima tela ao clicar em qualquer lugar da tela
-        document.body.addEventListener('click', function() {
-            document.getElementById('roomForm').submit();
+        // Script para tornar a página clicável, exceto o modal de linguagem
+        document.addEventListener('click', function(event) {
+            const modal = document.querySelector('.modal'); // Seleciona o modal
+            const modalOpen = modal && modal.classList.contains('show'); // Verifica se o modal está aberto
+            const isInsideModal = modal && modal.contains(event.target); // Verifica se o clique ocorreu dentro do modal
+    
+            if (!modalOpen || !isInsideModal) {
+                // Submete o formulário se o clique não for dentro do modal ou se o modal não estiver aberto
+                document.getElementById('roomForm').submit();
+            }
         });
-    </script> -->
+    </script>
+
 </body>
 </html>
