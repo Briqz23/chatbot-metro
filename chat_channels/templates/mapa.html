@@ -99,48 +99,76 @@
 
     iniciaWebSocket();
 
-    // Funções de Zoom 
+    // Variáveis para controle de zoom e arrasto
     let scale = 1;
     const maxScale = 3.2;
     const img = document.getElementById("zoomable-image");
 
-
     let isDragging = false;
     let startX, startY, translateX = 0, translateY = 0;
-                
-    //ZOOM IN
+
+    // Funções para Zoom
     function zoomIn() {
-        if (scale < maxScale){
-            scale += 0.6;  // Aumenta a escala em 0.1
-            if(scale > maxScale){
+        if (scale < maxScale) {
+            scale += 0.6; // Aumenta a escala
+            if (scale > maxScale) {
                 scale = maxScale;
             }
         }
-        
-        img.style.transform = `scale(${scale})`;
-    }
-                
-    //ZOOM OUT
-    function zoomOut() {
-        if (scale > 1) {  // Impede que o zoom out vá além do tamanho original
-            scale -= 0.6;  // Diminui a escala em 0.1
-            img.style.transform = `scale(${scale})`;
-        }
-    }
-            
-    //ZOOM NEUTRO
-    function neutralPosition(){
-        scale = 1
-        img.style.transform = `scale(${scale})`;
+        applyTransform();
     }
 
+    function zoomOut() {
+        if (scale > 1) { // Impede que o zoom out vá além do tamanho original
+            scale -= 0.6; // Diminui a escala
+            if (scale < 1) {
+                scale = 1;
+            }
+        }
+        applyTransform();
+    }
+
+    function neutralPosition() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        applyTransform();
+    }
+
+    // Aplica transformações de zoom e posição
     function applyTransform() {
         img.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
     }
 
-    // Funções para permitir arrastar a imagem
+    // Calcula os limites de arrasto da imagem
+    function getBounds() {
+        const container = document.querySelector('.image-container');
+        const containerRect = container.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+
+        // Dimensões da imagem ampliada
+        const imgWidth = imgRect.width;
+        const imgHeight = imgRect.height;
+
+        // Dimensões da caixa
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
+
+        // Calcula os limites máximos e mínimos para o arrasto
+        const maxTranslateX = Math.max(0, (imgWidth - containerWidth) / 2);
+        const maxTranslateY = Math.max(0, (imgHeight - containerHeight) / 2);
+
+        return {
+            minX: -maxTranslateX,
+            maxX: maxTranslateX,
+            minY: -maxTranslateY,
+            maxY: maxTranslateY,
+        };
+    }
+
+    // Eventos de arrasto
     img.addEventListener('mousedown', (e) => {
-        if (scale > 1) {  // Permite arrastar apenas se houver zoom
+        if (scale > 1) { // Permite arrastar apenas se houver zoom
             isDragging = true;
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
@@ -161,8 +189,16 @@
     img.addEventListener('mousemove', (e) => {
         if (isDragging) {
             e.preventDefault();
+
+            // Calcula a nova posição
             translateX = e.clientX - startX;
             translateY = e.clientY - startY;
+
+            // Aplica os limites
+            const bounds = getBounds();
+            translateX = Math.min(bounds.maxX, Math.max(bounds.minX, translateX));
+            translateY = Math.min(bounds.maxY, Math.max(bounds.minY, translateY));
+
             applyTransform();
         }
     });
