@@ -8,6 +8,6 @@ langchain==0.3.7
 langchain_community==0.3.7
 langchain_openai==0.2.8
 numpy==1.26.4
-openai==1.54.4
+openai==1.55.3
 Requests==2.32.3
 setuptools
