@@ -221,7 +221,7 @@ form button {
 
 /* Estilo das mensagens dentro do chat */
 .message {
-    max-height: 400px;
+    max-height: 73vh;
     overflow-y: auto; /* Permite rolagem no container de mensagens */
     display: flex;
     flex-direction: column;
