@@ -12,7 +12,9 @@
     <link rel="icon" href="{% static 'images/trem.png'%}" type="image/png">
 
     <title>Status das linhas</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -28,15 +30,15 @@
                     <ul>
                         <li>
                             <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
-                            <a href="{% url 'room' room_name=room_name username=username %}">Chat</a>
+                            <a href="{% url 'room' room_name=room_name username=username %}" id="menu-chat">Chat</a>
                         </li>
                         <li>
                             <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
-                            <a href="" onclick="event.preventDefault();">Status das Linhas</a>
+                            <a href="" onclick="event.preventDefault();" id="menu-status">Status das Linhas</a>
                         </li>
                         <li>
                             <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
-                            <a href="{% url 'mapa' %}">Mapa</a>
+                            <a href="{% url 'mapa' %}" id="menu-mapa">Mapa</a>
                         </li>
                         <li>
                             <button class="red-button" data-bs-toggle="modal" data-bs-target="#encerrarSessao">
@@ -50,37 +52,39 @@
             <div class="right-section">
                 <div id="linha-status">
                     <div class="pt-4 d-flex">
-                        <h2 class="text-primary status pe-4">Carregando Status das Linhas...</h2>
+                        <h2 class="text-primary status pe-4" id="status-loading">Carregando Status das Linhas...</h2>
                         <div class="spinner-border spinner-border-lg text-primary" role="status" aria-hidden="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- Modal ENCERRAR SESSÃO -->
+            <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-center">
+                        <div class="modal-header d-flex justify-content-center">
+                            <h3 class="modal-title text-white" id="modal-close-session">ENCERRAR SESSÃO</h3>
+                        </div>
+                        <br>
+                        <div class="modal-body text-white" id="modal-confirmation-text">
+                            Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)
+                        </div>
+                        <br>
+                        <div class="modal-footer d-flex justify-content-around">
+                            <button type="button" class="btn btn-secondary stay-button" data-bs-dismiss="modal"
+                                aria-label="Close" id="exit-button">Não</button>
+                            <button type="button" class="btn btn-primary exit-button" id="stay-button">Sim</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal ENCERRAR SESSÃO -->
-        <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content text-center">
-                    <div class="modal-header d-flex justify-content-center">
-                        <h3 class="modal-title text-white">ENCERRAR SESSÃO</h3>
-                    </div>
-                    <br>
-                    <div class="modal-body text-white">
-                        Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)  
-                    </div>
-                    <br>
-                    <div class="modal-footer d-flex justify-content-around">
-                        <button type="button" class="btn btn-secondary stay-button" data-bs-dismiss="modal" aria-label="Close">Não</button>
-                        <button type="button" class="btn btn-primary exit-button">Sim</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
 <div id="linha-status"></div>
 <script>
-    // SCRIPT para reabrir do WebSocket
+    // Script para WebSocket (ajustado)
     let socket;
 
     function iniciaWebSocket() {
@@ -95,16 +99,66 @@
 
     iniciaWebSocket();
 
+    // Função para traduzir o texto da página
+    function changeText(language) {
+        const text = {
+            pt: {
+                loadingStatus: "Carregando Status das Linhas...",
+                modalCloseSession: "ENCERRAR SESSÃO",
+                modalConfirmation: "Deseja mesmo encerrar esta sessão?<br>(perguntas e respostas do chat serão perdidas)",
+                stayButton: "Sim",
+                exitButton: "Não",
+                menuChat: "Chat",
+                menuStatus: "Status das Linhas",
+                menuMapa: "Mapa"
+            },
+            en: {
+                loadingStatus: "Loading Line Status...",
+                modalCloseSession: "CLOSE SESSION",
+                modalConfirmation: "Are you sure you want to close this session?<br>(chat messages will be lost)",
+                stayButton: "Yes",
+                exitButton: "No",
+                menuChat: "Chat",
+                menuStatus: "Line Status",
+                menuMapa: "Map"
+            },
+            es: {
+                loadingStatus: "Cargando Estado de las Líneas...",
+                modalCloseSession: "CERRAR SESIÓN",
+                modalConfirmation: "¿Seguro que deseas cerrar esta sesión?<br>(se perderán los mensajes del chat)",
+                stayButton: "Si",
+                exitButton: "No",
+                menuChat: "Chat",
+                menuStatus: "Estado de las Líneas",
+                menuMapa: "Mapa",
+            }
+        };
+
+        document.getElementById("status-loading").textContent = text[language].loadingStatus;
+        document.getElementById("modal-close-session").textContent = text[language].modalCloseSession;
+        document.getElementById("modal-confirmation-text").innerHTML = text[language].modalConfirmation;
+        document.getElementById("menu-chat").textContent = text[language].menuChat;
+        document.getElementById("menu-status").textContent = text[language].menuStatus;
+        document.getElementById("menu-mapa").textContent = text[language].menuMapa;
+        document.getElementById("stay-button").textContent = text[language].stayButton;        ;
+        document.getElementById("exit-button").textContent = text[language].exitButton;
+    }
+
+    // Aplica o idioma salvo no localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLanguage = localStorage.getItem("language") || "pt";
+        changeText(savedLanguage);
+        atualizarLinhas();
+    });
+
+    // Atualiza os dados das linhas
     function atualizarLinhas() {
-        fetch("{% url 'status_metro_api' %}")  // Rota Endpoint API
+        fetch("{% url 'status_metro_api' %}")
             .then(response => response.json())
             .then(data => {
                 let html = "";
                 data.linhas.forEach(linha => {
-                    // Define a classe de cor com base no número da linha
                     let corClasse = `linha-${linha.linha_numero}`;
-                    
-                    // Define a cor da bola de status
                     let statusClasse;
 
                     if (linha.linha_situacao === "Operação Normal") {
@@ -114,7 +168,7 @@
                     } else {
                         statusClasse = "vermelha";
                     }
-                    
+
                     html += `
                         <div>
                             <span class="linha-numero ${corClasse}">${linha.linha_numero}</span>
@@ -129,13 +183,9 @@
             })
             .catch(error => console.error("Erro ao carregar dados:", error));
     }
-    // Chama ao carregar a página
-    document.addEventListener("DOMContentLoaded", atualizarLinhas);
-
-    // event listener ao botão "Sim" quando o modal é exibido
-    // Fecha o WebSocket, volta para o início
-    $('#encerrarSessao').on('show.bs.modal', function () {
-        document.querySelector('.modal-footer .exit-button').addEventListener('click', function() {
+     // Event listener ao botão "Sim" quando o modal é exibido
+     $('#encerrarSessao').on('show.bs.modal', function () {
+        document.querySelector('.modal-footer .exit-button').addEventListener('click', function () {
             socket.send(JSON.stringify({ 'action': 'close' }));
             socket.close();
             window.location.href = '/';

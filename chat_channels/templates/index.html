@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,83 +12,106 @@
 </head>
 
 <body>
-    <div class="parent">
+    <div class="parent" id="clickable-area">
         <div class="child text-center">
 
-            <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" style="width: 450px; height: auto; background-color: transparent; margin-bottom: -20px;">
+            <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo"
+                style="width: 450px; height: auto; background-color: transparent; margin-bottom: -20px;">
             <form id="roomForm" action="{% url 'create-room' %}" method="POST">
                 {% csrf_token %}
-                <p style="color: white;">Toque em qualquer lugar para iniciar a sessão</p><br>
+                <p style="color: white;">Toque em qualquer lugar para iniciar a sessão</p>
             </form>
-            
-            <div class="mt-3">
 
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#botaoLinguas">
-                    Language / Idioma
-                </button>
-  
-                <!-- Modal -->
-                <div class="modal fade" id="botaoLinguas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <!--header-->
+            <!-- Modal -->
+            <div class="modal fade" id="botaoLinguas" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <!-- Cabeçalho -->
                         <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Idioma / Language</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Idioma / Language</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <!--corpo-->
+                        <!-- Corpo -->
                         <div class="modal-body">
                             <div class="d-grid gap-3 col-6 mx-auto">
-
-                                <button type="button" class="btn btn-outline-success">
-                                    <img src="{% static 'images/flag-brasil.png' %}" alt="bra" class="imagem-personalizada">
+                                <button type="button" class="btn btn-outline-success btn-language" data-lang="pt">
+                                    <img src="{% static 'images/flag-brasil.png' %}" alt="bra"
+                                        class="imagem-personalizada">
                                     Português
                                 </button>
-
-                                <button type="button" class="btn btn-outline-danger">
-                                    <img src="{% static 'images/flag-estados-unidos.png' %}" alt="usa" class="imagem-personalizada">
+                                <button type="button" class="btn btn-outline-danger btn-language" data-lang="en">
+                                    <img src="{% static 'images/flag-estados-unidos.png' %}" alt="usa"
+                                        class="imagem-personalizada">
                                     English
                                 </button>
-
-                                <button type="button" class="btn btn-outline-warning">
-                                    <img src="{% static 'images/flag-espanhol.png' %}" alt="esp" class="imagem-personalizada">
+                                <button type="button" class="btn btn-outline-warning btn-language" data-lang="es">
+                                    <img src="{% static 'images/flag-espanhol.png' %}" alt="esp"
+                                        class="imagem-personalizada">
                                     Español
                                 </button>
-
                                 <style>
                                     .imagem-personalizada {
-                                      max-width: 50px;
-                                      max-height: auto;
+                                        max-width: 50px;
+                                        max-height: auto;
                                     }
                                 </style>
-
                             </div>
                         </div>
-                      </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 
     <!-- Carregar o JavaScript do Bootstrap -->
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-    <!-- DESATIVADO, INTERFERE COM BOTÃO DO MODAL LINGUAGEM-->
+    <!-- Script para a tradução e interação -->
     <script>
-        // Script para tornar a página clicável, exceto o modal de linguagem
-        document.addEventListener('click', function(event) {
-            const modal = document.querySelector('.modal'); // Seleciona o modal
-            const modalOpen = modal && modal.classList.contains('show'); // Verifica se o modal está aberto
-            const isInsideModal = modal && modal.contains(event.target); // Verifica se o clique ocorreu dentro do modal
-    
-            if (!modalOpen || !isInsideModal) {
-                // Submete o formulário se o clique não for dentro do modal ou se o modal não estiver aberto
+        const translations = {
+            pt: { buttonText: "Toque em qualquer lugar para iniciar a sessão", modalTitle: "Idioma / Language" },
+            en: { buttonText: "Tap anywhere to start the session", modalTitle: "Language / Idioma" },
+            es: { buttonText: "Toca en cualquier lugar para iniciar la sesión", modalTitle: "Idioma / Language" }
+        };
+
+        function applyLanguage(language) {
+            const { buttonText, modalTitle } = translations[language];
+            document.querySelector("p").textContent = buttonText;
+            document.querySelector(".modal-title").textContent = modalTitle;
+        }
+
+        const savedLanguage = localStorage.getItem("language") || "pt";
+        applyLanguage(savedLanguage);
+
+        const languageButtons = document.querySelectorAll(".btn-language");
+        languageButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const selectedLanguage = button.getAttribute("data-lang");
+                localStorage.setItem("language", selectedLanguage);
+                applyLanguage(selectedLanguage);
+
+                // Fechar o modal e submeter o formulário
+                const modal = bootstrap.Modal.getInstance(document.getElementById('botaoLinguas'));
+                modal.hide();
+
+                // Submeter o formulário
                 document.getElementById('roomForm').submit();
+            });
+        });
+
+        // Detecta cliques na área inteira da página
+        document.getElementById('clickable-area').addEventListener('click', function (event) {
+            const modalElement = document.getElementById('botaoLinguas');
+            const isInsideModal = modalElement.contains(event.target);
+
+            if (!isInsideModal) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
             }
         });
     </script>
-
 </body>
+
 </html>
