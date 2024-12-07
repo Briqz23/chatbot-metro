@@ -79,6 +79,11 @@ Se preferir configurar o ambiente localmente, siga os passos abaixo para usar o 
 
 ---
 
+#### Observação: 
+O projeto Ponto Certo necessita de uma Chave de API da OpenAI e SECRET_KEY do Django para funcionar corretamente. Veja o arquivo `.env.example` como modelo.
+
+---
+
 ## Licença
 
 Este projeto está licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
