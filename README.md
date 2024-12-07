@@ -1,5 +1,7 @@
 # Metro Chatbot
 
+[![Assista à demonstração do projeto](https://img.youtube.com/vi/OnSJkpkA6bw/0.jpg)](https://youtu.be/OnSJkpkA6bw)
+
 Este é um projeto para o PI 6, Metro Chatbot, desenvolvido com Python, Django e outras bibliotecas.
 
 ## Como iniciar o projeto
@@ -60,7 +62,7 @@ Se preferir configurar o ambiente localmente, siga os passos abaixo para usar o 
 5. **Instale os requerimentos**:
    - Baixe as dependências necessárias executando:
      ```bash
-     pip install -r requirements.txt
+     pip install -r ./requirements.txt
      ```
 
 6. **Aplique as migrações do banco de dados**:
