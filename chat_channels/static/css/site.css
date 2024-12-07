@@ -1,0 +1,381 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Lemon Milk';
+    src: url('../fonts/LEMONMILK-Light.otf') format('truetype'); /* Fonte */
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*Isso aqui faz ele ocupar a tela inteira */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: 'Lemon Milk', sans-serif; 
+}
+
+/*height aqui também é importante para ele ocupar a página inteira */
+.container-fluid {
+    display: flex;
+    height: 100vh;
+}
+
+/* Parte da esquerda (Logo + Menu) */
+.left-section {
+    width: 20%;
+    background-color: #131F37;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    height: 100%;
+}
+
+.logo-img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.menu ul li img.menu-icon {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.menu ul li a:hover {
+    background-color: #FFFFFF2E;
+}
+
+/* Parte da direita (Chat) */
+.right-section {
+    height: 100vh;
+    width: 80%;
+    background-color: #363636;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.right-section h1, .right-section h2, .right-section p {
+    color: white;
+}
+
+@media only screen and (max-width: 600px) {
+    .left-section {
+        width: 30%;
+    }
+
+    .right-section {
+        width: 70%;
+    }
+}
+
+.bottom-button {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.red-button {
+    background-color: #ff0000;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.red-button:hover {
+    background-color: #cc0000;
+}
+
+.button-logo {
+    width: 25px;
+    height: auto;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-top: 2px solid #ffffff; /* Linha branca de separação */
+    padding-top: 10px; /* Espaço entre a linha e a caixa de texto */
+}
+
+form textarea {
+    width: 80%;
+    height: 44px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #808080; /* Cor de fundo cinza */
+    color: #ffffff; /* Cor do texto branco */
+    border: none; /* Remove a borda */
+    resize: none; /* Remove a opção de redimensionamento */
+    transition: background-color 0.2s, border 0.2s; /* Transição suave */
+}
+
+/* Ao focar na caixa de texto */
+form textarea:focus {
+    background-color: #909090; /* Fundo mais claro para destacar */
+    outline: none; /* Remove o outline padrão */
+    border: 1px solid #ffffff; /* Adiciona uma borda branca fina para destacar */
+}
+
+/* Ao passar o mouse sobre a caixa de texto */
+form textarea:hover {
+    background-color: #909090; /* Fundo levemente mais claro */
+    border: 1px solid #ffffff; /* Borda branca para realce */
+}
+
+
+form textarea::placeholder {
+    color: #ffffff; /* Cor do texto de placeholder em branco */
+}
+
+
+form button {
+    width: 25%;
+    padding: 10px;
+    background-color: #1672DE;
+    border-radius: 5px;
+    border: none;
+    color: #000;
+}
+
+/* Estilos para mensagens */
+.chat-body-parent {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow-y: auto;
+    align-items: center;
+}
+
+/* Estilo do container do chat */
+.chat-body {
+    width: 100%;
+    background-color: #363636;
+    padding: 10px;
+    border-radius: 10px;
+    overflow-y: auto; /* Permite rolagem */
+}
+
+/* Estilo para a barra de rolagem no .chat-body */
+.chat-body::-webkit-scrollbar {
+    width: 6px; /* Largura da barra de rolagem */
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da barra de rolagem */
+    border-radius: 10px;    /* Arredondamento da barra */
+}
+
+.chat-body::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cor da barra ao passar o mouse */
+}
+
+/* Estilo para navegadores Firefox no .chat-body */
+.chat-body {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+/* Estilo das mensagens dentro do chat */
+.message {
+    max-height: 73vh;
+    overflow-y: auto; /* Permite rolagem no container de mensagens */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo para a barra de rolagem no .message */
+.message::-webkit-scrollbar {
+    width: 6px; /* Largura da barra de rolagem */
+}
+
+.message::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da barra de rolagem */
+    border-radius: 10px;    /* Arredondamento da barra */
+}
+
+.message::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cor da barra ao passar o mouse */
+}
+
+/* Estilo para navegadores Firefox no .message */
+.message {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+.receive {
+    align-self: flex-start; /* Alinhamento à esquerda para a IA */
+    background-color: #000000; /* Cor preta para as bolhas */
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #fff; /* Cor do texto em branco */
+}
+
+.send {
+    align-self: flex-end; /* Alinhamento à direita para o usuário */
+    background-color: #202020; /* Cor cinza para as bolhas */
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #fff; /* Cor do texto em branco */
+}
+
+.send p {
+    color: #fff; /* Cor do texto em branco */
+}
+
+.receive p {
+    color: #fff; /* Cor do texto em branco */
+}
+
+.send-btn {
+    background-color: #1672DE;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+    background-color: darkblue;
+}
+
+.send-btn .send-icon {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.image-btn {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.image-btn:hover {
+    background-color: lightgray;
+}
+
+.icon-image {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.chat-body .message p {
+    color: white;
+}
+
+.chat-body .message .send,
+.chat-body .message .receive {
+    color: white;
+}
+
+.welcome-container {
+    /* Aqui vão os estilos personalizados para o container da mensagem de boas-vindas */
+    background-color: #363636;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Linha branca abaixo do texto */
+.welcome-container h2 {
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ffffff; /* Linha branca abaixo do texto */
+    display: inline-block;
+    width: 100%; /* Faz a linha ocupar toda a largura do container */
+}
+
+/* Modal para ENCERRAR SESSÃO e customização */
+
+.modal-content {
+    background-color: #3A3A3A;
+    border-radius: 30px;
+}
+
+.modal-header {
+    background-color: #D32F2F;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom: none;
+}
+
+.stay-button {
+    background-color: #5A5A5A;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 80px;
+    height: 40px;
+    font-size: 16px;
+}
+.exit-button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 80px;
+    height: 40px;
+    font-size: 16px;
+}

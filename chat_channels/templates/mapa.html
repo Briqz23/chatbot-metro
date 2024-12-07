@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mapa.css' %}">
+    <link rel="icon" href="{% static 'images/trem.png'%}" type="image/png">
+
+    <title>Mapa linhas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Menu da esquerda -->
+            <div class="col-md-3 left-section">
+                <div class="logo">
+                    <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+                </div>
+                <nav class="menu">
+                    <ul>
+                        <li>
+                            <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
+                            <a href="{% url 'room' room_name=room_name username=username %}" id="menu-chat">Chat</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
+                            <a href="{% url 'status' %}" id="menu-status">Status das Linhas</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
+                            <a href="" onclick="event.preventDefault();" id="menu-mapa">Mapa</a>
+                        </li>
+                        <li>
+                            <button class="red-button" data-bs-toggle="modal" data-bs-target="#encerrarSessao">
+                                <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- Menu direita -->
+            <div class="col-md-9 right-section">
+                <!-- Render MAPA -->
+                <div class="image-container">
+                    <img id="zoomable-image" src="{% static 'images/MapaMetro.png' %}" alt="Imagem para zoom">
+                </div>
+
+                <!-- Botões de Zoom -->
+                <div class="buttons">
+                    <div class="side-line"></div>
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="zoomIn()"> + </button>
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="zoomOut()"> - </button>
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="neutralPosition()"> / </button>
+                </div>
+            </div>
+        </div>
+        <!-- Modal ENCERRAR SESSÃO -->
+        <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-header d-flex justify-content-center">
+                        <h3 class="modal-title text-white" id="modal-title">ENCERRAR SESSÃO</h3>
+                    </div>
+                    <br>
+                    <div class="modal-body text-white" id="modal-body">
+                        Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)
+                    </div>
+                    <br>
+                    <div class="modal-footer d-flex justify-content-around">
+                        <button type="button" class="btn btn-secondary stay-button" data-bs-dismiss="modal"
+                            aria-label="Close" id="stay-button">Não</button>
+                        <button type="button" class="btn btn-primary exit-button" id="exit-button">Sim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    // SCRIPT para reabrir do WebSocket
+    let socket;
+
+    function iniciaWebSocket() {
+        const wsEndpoint = sessionStorage.getItem("wsEndpoint");
+        if (wsEndpoint) {
+            socket = new WebSocket(wsEndpoint);
+            console.log("WebSocket reaberto!");
+        } else {
+            console.error("WebSocket endpoint não encontrado.");
+        }
+    }
+
+    iniciaWebSocket();
+
+    // Função para obter o idioma atual
+    function getLanguage() {
+        return localStorage.getItem("language") || "pt";
+    }
+
+
+    const translations = {
+        pt: {
+            menuChat: "Chat",
+            menuStatus: "Status das Linhas",
+            menuMapa: "Mapa",
+            modalTitle: "ENCERRAR SESSÃO",
+            modalBody: "Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)",
+            stayButton: "Não",
+            exitButton: "Sim"
+        },
+        en: {
+            menuChat: "Chat",
+            menuStatus: "Line Status",
+            menuMapa: "Map",
+            modalTitle: "END SESSION",
+            modalBody: "Do you really want to end this session?<br>(chat questions and answers will be lost)",
+            stayButton: "No",
+            exitButton: "Yes"
+        },
+        es: {
+            menuChat: "Chat",
+            menuStatus: "Estado de las Líneas",
+            menuMapa: "Mapa",
+            modalTitle: "CERRAR SESIÓN",
+            modalBody: "¿Realmente quieres cerrar esta sesión?<br>(las preguntas y respuestas del chat se perderán)",
+            stayButton: "No",
+            exitButton: "Sí"
+        }
+    };
+
+
+    function applyLanguage(language) {
+        const langData = translations[language];
+
+
+        document.getElementById("menu-chat").textContent = langData.menuChat;
+        document.getElementById("menu-status").textContent = langData.menuStatus;
+        document.getElementById("menu-mapa").textContent = langData.menuMapa;
+
+
+        document.getElementById("modal-title").textContent = langData.modalTitle;
+        document.getElementById("modal-body").innerHTML = langData.modalBody;
+        document.getElementById("stay-button").textContent = langData.stayButton;
+        document.getElementById("exit-button").textContent = langData.exitButton;
+    }
+
+
+    const savedLanguage = getLanguage();
+    applyLanguage(savedLanguage);
+
+    // Variáveis para controle de zoom e arrasto
+    let scale = 1;
+    const maxScale = 3.2;
+    const img = document.getElementById("zoomable-image");
+
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+
+    // Funções para Zoom
+    function zoomIn() {
+        if (scale < maxScale) {
+            scale += 0.6; // Aumenta a escala
+            if (scale > maxScale) {
+                scale = maxScale;
+            }
+        }
+        applyTransform();
+    }
+
+    function zoomOut() {
+        if (scale > 1) { // Impede que o zoom out vá além do tamanho original
+            scale -= 0.6; // Diminui a escala
+            if (scale < 1) {
+                scale = 1;
+            }
+        }
+        applyTransform();
+    }
+
+    function neutralPosition() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        applyTransform();
+    }
+
+    // Aplica transformações de zoom e posição
+    function applyTransform() {
+        img.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    // Calcula os limites de arrasto da imagem
+    function getBounds() {
+        const container = document.querySelector('.image-container');
+        const containerRect = container.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+
+        const imgWidth = imgRect.width;
+        const imgHeight = imgRect.height;
+
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
+
+        const maxTranslateX = Math.max(0, (imgWidth - containerWidth) / 2);
+        const maxTranslateY = Math.max(0, (imgHeight - containerHeight) / 2);
+
+        return {
+            minX: -maxTranslateX,
+            maxX: maxTranslateX,
+            minY: -maxTranslateY,
+            maxY: maxTranslateY,
+        };
+    }
+
+    // Eventos de arrasto
+    img.addEventListener('mousedown', (e) => {
+        if (scale > 1) {
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            img.style.cursor = 'grabbing';
+        }
+    });
+
+    img.addEventListener('mouseup', () => {
+        isDragging = false;
+        img.style.cursor = 'grab';
+    });
+
+    img.addEventListener('mouseleave', () => {
+        isDragging = false;
+        img.style.cursor = 'default';
+    });
+
+    img.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+
+            const bounds = getBounds();
+            translateX = Math.min(bounds.maxX, Math.max(bounds.minX, translateX));
+            translateY = Math.min(bounds.maxY, Math.max(bounds.minY, translateY));
+
+            applyTransform();
+        }
+    });
+
+    // Event listener ao botão "Sim" quando o modal é exibido
+    $('#encerrarSessao').on('show.bs.modal', function () {
+        document.querySelector('.modal-footer .exit-button').addEventListener('click', function () {
+            socket.send(JSON.stringify({ 'action': 'close' }));
+            socket.close();
+            window.location.href = '/';
+            console.log("Conexão com WebSocket fechada!");
+        });
+    });
+</script>
+
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/monitor.js' %}"></script>
+
+</html>

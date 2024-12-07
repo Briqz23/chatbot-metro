@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="icon" href="{% static 'images/trem.png'%}" type="image/png">
+
+    <title>Mensagens</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+
+    <!-- Menu da esquerda -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 left-section">
+                <div class="logo">
+                    <img src="{% static 'images/Logo_PontoCerto.png' %}" alt="Logo" class="logo-img">
+                </div>
+                <nav class="menu">
+                    <ul>
+                        <li>
+                            <img src="{% static 'images/chat.png' %}" alt="Icon 1" class="menu-icon">
+                            <a href="" onclick="event.preventDefault();" id="menu-chat">Chat</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/status.png' %}" alt="Icon 2" class="menu-icon">
+                            <a href="{% url 'status' %}" id="menu-status">Status das Linhas</a>
+                        </li>
+                        <li>
+                            <img src="{% static 'images/mapa.png' %}" alt="Icon 3" class="menu-icon">
+                            <a href="{% url 'mapa' %}" id="menu-mapa">Mapa</a>
+                        </li>
+                        <li>
+                            <button class="red-button" data-bs-toggle="modal" data-bs-target="#encerrarSessao">
+                                <img src="{% static 'images/sair.png' %}" alt="Botão Logo" class="button-logo">
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Chat (na direita) -->
+            <div class="col-md-9 right-section">
+                <!-- Container separado para a mensagem de boas-vindas -->
+                <div class="welcome-container">
+                    <center>
+                        <h2 id="chatTitle">Bem vindo ao PontoCerto, do que você precisa?</h2>
+                    </center>
+                </div>
+
+                <div class="chat-body-parent">
+                    <div class="chat-body" id="tasks">
+                        <div class="message" id="chatContainer">
+                            <!-- Mensagens recebidas abaixo -->
+                            {% for i in messages %}
+                            {% if i.sender != user %}
+                            <div class="receive">
+                                <p style="color: #fff;">{{ i.message }}</p>
+                            </div>
+                            {% else %}
+                            <div class="send">
+                                <p style="color: #fff;">{{ i.message }}</p>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="form">
+                            <form action="" id="message-form" method="POST">
+                                {% csrf_token %}
+                                <textarea id="msg" cols="30" name="message" rows="10" placeholder="Digite..."
+                                    required></textarea>
+
+                                <button class="send-btn" type="submit">
+                                    <img src="{% static 'images/seta.png' %}" alt="Send" class="send-icon">
+                                </button>
+
+                                <button class="image-btn" id="microphone-button">
+                                    <img src="{% static 'images/microfone.png' %}" alt="icon" class="icon-image"
+                                        id="microphone-icon">
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal ENCERRAR SESSÃO -->
+            <div class="modal fade" id="encerrarSessao" tabindex="-1" aria-labelledby="encerrarSessao"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-center">
+                        <div class="modal-header d-flex justify-content-center">
+                            <h3 class="modal-title text-white" id="modal-title">ENCERRAR SESSÃO</h3>
+                        </div>
+                        <br>
+                        <div class="modal-body text-white" id="modal-body">
+                            Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)
+                        </div>
+                        <br>
+                        <div class="modal-footer d-flex justify-content-around">
+                            <button type="button" class="btn btn-secondary stay-button" data-bs-dismiss="modal"
+                                aria-label="Close" id="stay-button">Não</button>
+                            <button type="button" class="btn btn-primary exit-button" id="exit-button">Sim</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</body>
+
+<script>
+    // Função para obter o idioma atual
+    function getLanguage() {
+        return localStorage.getItem("language") || "pt";
+    }
+
+
+    const translations = {
+        pt: {
+            chatTitle: "Bem-vindo ao PontoCerto, do que você precisa?",
+            placeholder: "Digite...",
+            sendButton: "Enviar",
+            menuChat: "Chat",
+            menuStatus: "Status das Linhas",
+            menuMapa: "Mapa",
+            modalTitle: "ENCERRAR SESSÃO",
+            modalBody: "Deseja mesmo encerrar está sessão?<br>(perguntas e respostas do chat serão perdidas)",
+            stayButton: "Não",
+            exitButton: "Sim"
+        },
+        en: {
+            chatTitle: "Welcome to PontoCerto, how can I help you?",
+            placeholder: "Type a message...",
+            sendButton: "Send",
+            menuChat: "Chat",
+            menuStatus: "Line Status",
+            menuMapa: "Map",
+            modalTitle: "END SESSION",
+            modalBody: "Do you really want to end this session?<br>(chat questions and answers will be lost)",
+            stayButton: "No",
+            exitButton: "Yes"
+        },
+        es: {
+            chatTitle: "Bienvenido a PontoCerto, ¿en qué puedo ayudarte?",
+            placeholder: "Escribe un mensaje...",
+            sendButton: "Enviar",
+            menuChat: "Chat",
+            menuStatus: "Estado de las Líneas",
+            menuMapa: "Mapa",
+            modalTitle: "CERRAR SESIÓN",
+            modalBody: "¿Realmente quieres cerrar esta sesión?<br>(las preguntas y respuestas del chat se perderán)",
+            stayButton: "No",
+            exitButton: "Sí"
+        }
+    };
+
+
+    function applyLanguage(language) {
+        const langData = translations[language];
+
+
+        document.getElementById("chatTitle").textContent = langData.chatTitle;
+        document.getElementById("msg").placeholder = langData.placeholder;
+        document.querySelector('.send-btn img').alt = langData.sendButton;
+
+
+        document.getElementById("menu-chat").textContent = langData.menuChat;
+        document.getElementById("menu-status").textContent = langData.menuStatus;
+        document.getElementById("menu-mapa").textContent = langData.menuMapa;
+
+
+        document.getElementById("modal-title").textContent = langData.modalTitle;
+        document.getElementById("modal-body").innerHTML = langData.modalBody;
+        document.getElementById("stay-button").textContent = langData.stayButton;
+        document.getElementById("exit-button").textContent = langData.exitButton;
+    }
+
+
+    const savedLanguage = getLanguage();
+    applyLanguage(savedLanguage);
+
+
+    let socket;
+
+    // Quando uma nova mensagem for enviada, essa função ativa
+    function scrollToBottom() {
+        var chatContainer = document.getElementById("chatContainer");
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Verifica o protocolo e define Endpoint
+    const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+    // Cria a URL do Endpoint para relacionar com o routing.py 
+    const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
+    socket = new WebSocket(wsEndpoint);
+
+    // Evento de conexão com WebSocket aberta
+    socket.onopen = (event) => {
+        console.log("Conexão com WebSocket aberta!");
+    };
+
+    // Guarda o WebSocket na sessionStorage
+    sessionStorage.setItem("wsEndpoint", wsEndpoint);
+
+    // Função de envio de mensagem
+    function sendMessage() {
+        const message = document.getElementById('msg').value;
+        if (message.trim() !== "") {
+            socket.send(
+                JSON.stringify({
+                    'message': message,
+                    'room_name': '{{room_name}}',
+                    'sender': '{{user}}',
+                })
+            );
+
+            // Muda o texto do container de boas-vindas para "chat"
+            document.querySelector('.welcome-container h2').textContent = 'Chat';
+        }
+    }
+
+    // Evento para o botão 'submit'
+    document.getElementById('message-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Previne a página de recarregar
+        sendMessage();
+    });
+
+    // Envia a mensagem ao pressionar Enter
+    document.getElementById('msg').addEventListener('keypress', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) { // Envia apenas com Enter, sem Shift
+            event.preventDefault(); // Previne quebra de linha
+            sendMessage();
+        }
+    });
+
+    // Res do consumidor no servidor (f.dev console.log)
+    socket.addEventListener("message", (event) => {
+        // Pega data de msgs do back
+        const messageData = JSON.parse(event.data)['message'];
+        console.log(messageData);
+
+        var sender = messageData['sender'];
+        var message = messageData['message'];
+
+        // Input fica vazio após envio de msg
+        if (sender == '{{user}}') {
+            document.getElementById('msg').value = '';
+        }
+
+        // Adiciona msg no chatbox
+        var messageDiv = document.querySelector('.message');
+        var newMessage = document.createElement('div');
+
+        // Verifica o remetente e aplica a classe adequada
+        if (sender != '{{user}}') {
+            newMessage.classList.add('receive');
+            newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
+        } else {
+            newMessage.classList.add('send');
+            newMessage.innerHTML = '<p style="color: #fff;">' + message + '</p>';
+        }
+
+        // Adiciona a nova mensagem ao contêiner
+        messageDiv.appendChild(newMessage);
+        scrollToBottom();
+    });
+
+    // event listener ao botão "Sim" quando o modal é exibido
+    // Fecha o WebSocket, volta para o início
+    $('#encerrarSessao').on('show.bs.modal', function () {
+        document.querySelector('.modal-footer .exit-button').addEventListener('click', function () {
+            socket.send(JSON.stringify({ 'action': 'close' }));
+            socket.close();
+            window.location.href = '/';
+            console.log("Conexão com WebSocket fechada!");
+        });
+    });
+
+    // Código para a funcionalidade de reconhecimento de voz
+    // Seleciona os elementos necessários
+    const microphoneButton = document.getElementById('microphone-button');
+    const microphoneIcon = document.getElementById('microphone-icon');
+    const messageTextarea = document.getElementById('msg');
+
+    // Variável de controle para o estado de gravação
+    let isRecording = false;
+
+    // Verifica se o navegador suporta a API de reconhecimento de fala
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+
+        // Configurações de reconhecimento de voz
+        recognition.lang = 'pt-BR';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        // Inicia ou para o reconhecimento ao clicar no botão de microfone
+        microphoneButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            if (!isRecording) {
+                // Inicia o reconhecimento de voz
+                recognition.start();
+                messageTextarea.placeholder = "Ouvindo..."; // Altera o placeholder para "Ouvindo"
+                microphoneIcon.src = "{% static 'images/microfone_ativo.png' %}"; // Altera o ícone do microfone
+                isRecording = true; // Atualiza o estado para 'gravando'
+            } else {
+                // Para o reconhecimento de voz
+                recognition.stop();
+                messageTextarea.placeholder = "Digite..."; // Restaura o placeholder original
+                microphoneIcon.src = "{% static 'images/microfone.png' %}"; // Restaura o ícone original
+                isRecording = false; // Atualiza o estado para 'não gravando'
+            }
+        });
+
+        // Quando o reconhecimento é concluído com sucesso
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            messageTextarea.value = transcript; // Insere o texto na caixa de texto
+        };
+
+        // Quando o reconhecimento de voz termina
+        recognition.onend = () => {
+            if (isRecording) {
+                // Se terminou naturalmente enquanto estava gravando, reseta o ícone e o placeholder
+                messageTextarea.placeholder = "Digite...";
+                microphoneIcon.src = "{% static 'images/microfone.png' %}";
+                isRecording = false; // Atualiza o estado para 'não gravando'
+            }
+        };
+
+        // Lida com erros de reconhecimento
+        recognition.onerror = (event) => {
+            console.error("Erro no reconhecimento de voz:", event.error);
+            messageTextarea.placeholder = "Digite..."; // Restaura o placeholder em caso de erro
+            microphoneIcon.src = "{% static 'images/microfone.png' %}"; // Restaura o ícone original em caso de erro
+            isRecording = false; // Atualiza o estado para 'não gravando'
+        };
+    } else {
+        alert("Reconhecimento de voz não é suportado neste navegador.");
+    }
+
+
+</script>
+
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/monitor.js' %}"></script>
+
+</html>

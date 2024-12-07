@@ -1,0 +1,75 @@
+    /* Define uma classe para cada linha com sua respectiva cor */
+    .linha-1 { background-color: #171796; }
+    .linha-2 { background-color: #007a5e; }
+    .linha-3 { background-color: #ed2e38; }
+    .linha-4 { background-color: #ffd325; }
+    .linha-5 { background-color: #ba1fb5; }
+    .linha-15 { background-color: #8f8f8c; }
+    /* Adicione mais classes conforme necessário para cada linha */
+
+    .linha-numero {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        color: white; /* Garante o texto branco */
+        font-weight: bold;
+        text-align: center;
+        line-height: 50px;
+        margin-right: 15px; /* Espaçamento entre o quadrado e o texto */
+        border-radius: 5px; /* Borda arredondada */
+        vertical-align: middle; /* Alinha verticalmente com o texto */
+        font-size: 30px;
+    }
+
+    /* Garante que o texto da linha também esteja branco e define a separação */
+    #linha-status div {
+        color: white;
+        margin-bottom: 20px; /* Espaço maior entre cada linha */
+        font-size: 30px;
+        border-bottom: 1px solid white; /* Linha separadora branca */
+        padding-bottom: 10px; /* Espaçamento extra */
+        display: flex;
+        align-items: center; /* Alinha os itens na mesma linha */
+    }
+
+    /* Remove a linha separadora do último elemento */
+    #linha-status div:last-child {
+        border-bottom: none;
+    }
+
+    /* Estilo da bola de status */
+    .status-bola {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 20px; /* Espaço entre o status e o nome */
+        vertical-align: middle;
+    }
+    
+    /* Cor verde para operação normal */
+    .status-bola.verde {
+        background-color: #00FF00;
+    }
+    
+    /* Cor vermelha para operação interrompida */
+    .status-bola.vermelha {
+        background-color: #FF0000;
+    }
+
+    .status-bola.cinza {
+        background-color: #A0A0A0;
+    }
+
+    /* Ajusta o alinhamento do nome e operação */
+    .linha-nome {
+        flex-grow: 1; /* Faz o nome da linha crescer e ocupar o espaço */
+        font-weight: bold;
+        text-align: left; /* Alinha o nome à esquerda */
+    }
+
+    .linha-status {
+        font-size: 28px; /* Ajuste no tamanho do texto de operação */
+        margin-left: 10px; /* Espaço entre o nome e o status */
+        text-align: center; /* Centraliza o texto de operação */
+    }
